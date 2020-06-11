@@ -1,0 +1,48 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item routerLink="/docs">
+        <mat-icon>description</mat-icon>
+        <span>Docs</span>
+      </button>
+      <button mat-menu-item routerLink="/checks">
+        <mat-icon>dashboard</mat-icon>
+        <span>Checks</span>
+      </button>
+      <button mat-menu-item routerLink="/account">
+        <mat-icon>account_circle</mat-icon>
+        <span>Account</span>
+      </button>
+      <button mat-menu-item routerLink="/settings">
+        <mat-icon>settings</mat-icon>
+        <span>Settings</span>
+      </button>
+    </mat-menu>
+
+    <button mat-button style="margin-right: 1em" routerLink="/home">CSG</button>
+    <button mat-button style="margin-right: 1em" routerLink="/chats">Chats</button>
+    <button mat-button style="margin-right: 1em" routerLink="/dashboard">Dashboard</button>
+    <button mat-button style="margin-right: 1em" routerLink="/workspace">WorkSpace</button>
+    <span class="example-spacer"></span>
+
+    <mat-form-field class="searchField">
+      <input matInput type="text" [(ngModel)]="value" style="font-size: medium" placeholder="Search">
+      <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <button mat-button>
+      <mat-icon>invert_colors</mat-icon>
+    </button>
+    <button mat-button>
+      <mat-icon>language</mat-icon>
+    </button>
+    <button mat-button routerLink="/entry">
+      Log Out <mat-icon>exit_to_app</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>

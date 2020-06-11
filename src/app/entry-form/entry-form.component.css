@@ -1,0 +1,35 @@
+/*body {*/
+/*  !*background-image: url("src/assets/screens/fon.png") !important;*!*/
+/*}*/
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10%;
+  text-align: center;
+  align-content: center;
+}
+
+.mat-form-field {
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 12em;
+  width: 15em;
+}
+
+.example-right-align {
+  text-align: right;
+}
+
+input.example-right-align::-webkit-outer-spin-button,
+input.example-right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.example-right-align {
+  -moz-appearance: textfield;
+}
+
+.buttons {
+  text-align: center;
+}

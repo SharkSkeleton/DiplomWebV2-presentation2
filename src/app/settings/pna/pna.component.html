@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>New project creation</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Project Name</mat-label>
+    <input matInput [(ngModel)]="project.name" placeholder="Ex. MyProject">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Project language</mat-label>
+    <mat-select [(ngModel)]="project.language" name="option">
+      <mat-option *ngFor="let option of options.myLanguage" [value]="option" (click)="click()">
+        {{option}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Project template</mat-label>
+    <mat-select [(ngModel)]="project.template" name="option">
+      <mat-option value="{{options.myTemplate[0]}}" [disabled]="changeJava">{{options.myTemplate[0]}}</mat-option>
+      <mat-option value="{{options.myTemplate[1]}}" [disabled]="changeJava">{{options.myTemplate[1]}}</mat-option>
+      <mat-option value="{{options.myTemplate[2]}}" [disabled]="changePython">{{options.myTemplate[2]}}</mat-option>
+      <mat-option value="{{options.myTemplate[3]}}" [disabled]="changeCpp">{{options.myTemplate[3]}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Full launch file name</mat-label>
+    <input matInput [(ngModel)]="project.launchFile" placeholder="Ex. Main.java">
+  </mat-form-field>
+  <div style="">
+    <mat-form-field>
+      <mat-label>Port</mat-label>
+      <input matInput [(ngModel)]="selectedPort" placeholder="Ex. 8080">
+    </mat-form-field>
+    <button mat-button (click)="addPort()">ADD</button>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Discard</button>
+  <button mat-button [mat-dialog-close]="data.login" (click)="createProject()">Apply</button>
+</div>

@@ -1,0 +1,15 @@
+<div class="content">
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <h3>Console:</h3>
+      <span class="example-spacer"></span>
+      <button mat-button (click)="openLink($event)"><mat-icon>clear</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <mat-divider></mat-divider>
+  <mat-form-field class="example-full-width">
+    <mat-label>Result:</mat-label>
+    <textarea matInput>{{result}}</textarea>
+  </mat-form-field>
+</div>

@@ -1,0 +1,22 @@
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.round {
+  margin-top: 3em;
+  width: 20em;
+  height: 19em;
+  border-radius: 25em; /* Радиус скругления */
+}
+
+.text-container {
+  text-align: center;
+  padding: 1em;
+}
+
+.pad {
+  margin-right: 0.5em;
+}

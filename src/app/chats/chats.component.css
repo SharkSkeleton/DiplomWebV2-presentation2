@@ -1,0 +1,19 @@
+.container {
+  width: 100%;
+  min-height: 52vw;
+}
+
+mat-drawer {
+  min-width: 15em;
+  max-width: 20em;
+}
+
+.header-image {
+  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  background-size: cover;
+}
+
+.noneChatLbl {
+  text-align: center;
+  margin-top: 30%;
+}

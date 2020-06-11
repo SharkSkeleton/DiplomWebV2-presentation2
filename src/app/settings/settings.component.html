@@ -1,0 +1,74 @@
+<app-header></app-header>
+<div class="content">
+  <div class="text-container">
+    <h3>Your project settings</h3>
+    <div mat-dialog-content>
+      <mat-form-field appearance="fill">
+        <mat-label>Projects</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let pName of projects.names" [value]="pName" (click)="option(pName)">{{pName}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <br>
+
+    <div mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Language</mat-label>
+      <input matInput disabled [(ngModel)]="currentLanguage">
+    </mat-form-field>
+<!--      <mat-form-field appearance="fill">-->
+<!--        <mat-label>Language</mat-label>-->
+<!--        <mat-select>-->
+<!--          <mat-option value="option" *ngFor="let language of languages">{{language}}</mat-option>-->
+<!--        </mat-select>-->
+<!--      </mat-form-field>-->
+    </div>
+
+    <br>
+    <div mat-dialog-content>
+      <mat-form-field>
+        <mat-label>Template</mat-label>
+        <input matInput disabled [(ngModel)]="currentTemplate">
+      </mat-form-field>
+<!--      <mat-form-field appearance="fill">-->
+<!--        <mat-label>Templates</mat-label>-->
+<!--        <mat-select>-->
+<!--          <mat-option value="option" *ngFor="let template of templates">{{template}}</mat-option>-->
+<!--        </mat-select>-->
+<!--      </mat-form-field>-->
+    </div>
+<!--    <div>-->
+<!--      <button mat-raised-button color="primary" (click)="openLibsa()">Add</button>-->
+<!--    </div>-->
+    <br>
+
+    <div mat-dialog-content>
+      <mat-form-field appearance="fill">
+        <mat-label>Start file</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let file of files" [value]="file">{{file}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <button mat-raised-button color="primary" (click)="saveBtn()">SAVE</button>
+    </div>
+<!--    <div>-->
+<!--      <button mat-raised-button color="primary" (click)="openStarta()">Add</button>-->
+<!--    </div>-->
+    <br>
+    <h3>New project creation</h3>
+    <div>
+      <button mat-raised-button color="primary" (click)="openPna()">ADD</button>
+    </div>
+    <br>
+    <h3>New task creation</h3>
+    <div>
+      <button mat-raised-button color="primary" (click)="openStarta()">ADD</button>
+    </div>
+
+  </div>
+
+</div>
+<app-footer></app-footer>

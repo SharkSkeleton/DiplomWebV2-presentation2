@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>You add user:</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Login:</mat-label>
+    <input matInput disabled [(ngModel)]="data.login">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Password:</mat-label>
+    <input matInput disabled [(ngModel)]="data.password">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Role:</mat-label>
+    <input matInput disabled [(ngModel)]="data.role">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Ok</button>
+</div>

@@ -1,0 +1,38 @@
+<app-header></app-header>
+
+<mat-horizontal-stepper [linear]="isLinear" (selectionChange)="onStepChange($event)">
+  <mat-step>
+    <ng-template matStepLabel>
+        TODO
+    </ng-template>
+
+    <app-tasks></app-tasks>
+
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>
+        In Progress
+    </ng-template>
+
+    <app-tasks></app-tasks>
+
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>
+        On Checking
+      </ng-template>
+
+    <app-tasks></app-tasks>
+
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>
+        Done
+    </ng-template>
+
+    <app-tasks></app-tasks>
+
+  </mat-step>
+</mat-horizontal-stepper>
+
+<app-footer></app-footer>

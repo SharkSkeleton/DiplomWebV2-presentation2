@@ -1,0 +1,23 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+
+.pad {
+  margin-right: 0.5em;
+}
+
+.example-card {
+  float:left;
+  position: static;
+  max-width: 36em;
+  margin: 1em;
+}
+
+.cardHolder {
+  display: inline-block;
+}
+
+mat-card-actions {
+  text-align: center;
+}

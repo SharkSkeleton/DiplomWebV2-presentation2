@@ -1,0 +1,25 @@
+<div class="example-container">
+  <h3><br>Welcome!<br>Please, Log in</h3>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your login</mat-label>
+    <input matInput [(ngModel)]="user.login" [formControl]="login" required>
+    <mat-error *ngIf="login.invalid">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your password</mat-label>
+    <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="user.password" [formControl]="password" required>
+    <mat-error *ngIf="password.invalid">{{getPassErrorMessage()}}</mat-error>
+    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <section class="buttons">
+    <button mat-raised-button color="primary" style="margin-right: 1em" (click)="testBtn()" routerLink="/home">Test Launch</button>
+    <button mat-raised-button color="primary" [disabled]="login.invalid || password.invalid" style="margin-left: 1em" (click)="submit(user)" routerLink="{{routerLink}}">Sign In</button>
+  </section>
+
+</div>
+

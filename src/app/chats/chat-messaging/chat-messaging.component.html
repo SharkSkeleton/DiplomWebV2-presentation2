@@ -1,0 +1,16 @@
+<mat-list class="allMessages">
+  <mat-list-item>Message 1</mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item>Message 2</mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item>Message 3</mat-list-item>
+</mat-list>
+
+<mat-form-field class="typeMessageField">
+  <mat-label>Type your message here</mat-label>
+  <textarea matInput
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="1" style=""></textarea>
+</mat-form-field>

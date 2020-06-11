@@ -1,0 +1,26 @@
+<app-header></app-header>
+
+<mat-drawer-container class="container" autosize>
+  <mat-drawer #drawer class="sidenav" mode="side">
+    <app-contents-tree></app-contents-tree>
+  </mat-drawer>
+  <div class="sidenav-content">
+    <mat-toolbar color="warm">
+      <mat-toolbar-row>
+        <button type="button" mat-button (click)="drawer.toggle()" class="showHideBtn">
+          <mat-icon>vertical_split</mat-icon> Toggle contents-tree</button>
+        <span class="example-spacer"></span>
+        <mat-form-field class="searchField">
+          <input matInput type="text" [(ngModel)]="value" style="font-size: medium" placeholder="Search">
+          <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </mat-toolbar-row>
+    </mat-toolbar>
+
+    Here we should put description of our system and docs!
+  </div>
+</mat-drawer-container>
+
+<app-footer></app-footer>

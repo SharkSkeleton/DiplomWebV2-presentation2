@@ -1,0 +1,9 @@
+.typeMessageField {
+  font-size: medium;
+  width: 100%;
+}
+
+.allMessages {
+  width: 100%;
+  min-height: 43.3vw;
+}

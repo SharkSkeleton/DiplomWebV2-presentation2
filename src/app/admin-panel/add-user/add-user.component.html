@@ -1,0 +1,33 @@
+<app-admin-panel-header></app-admin-panel-header>
+
+<div class="content">
+  <img mat-card-avatar src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu" class="round">
+
+  <div class="text-container">
+
+    <mat-form-field appearance="fill">
+      <mat-label>Login</mat-label>
+      <input matInput [(ngModel)]="user.login" [formControl]="login" required>
+      <mat-error *ngIf="login.invalid">{{getErrMsg(login, 'Enter user login!')}}</mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input matInput [(ngModel)]="user.password" [formControl]="password" required>
+      <mat-error *ngIf="password.invalid">{{getErrMsg(password, 'Enter user password!')}}</mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field appearance="fill">
+      <mat-label>Role</mat-label>
+      <mat-select [(ngModel)]="user.role" [formControl]="role" required>
+        <mat-option *ngFor="let role of roles" [value]="role">{{role}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="role.invalid">{{getErrMsg(role, 'Select user role!')}}</mat-error>
+    </mat-form-field>
+    <br>
+    <button mat-raised-button color="primary" [disabled]="login.invalid || password.invalid || role.invalid" (click)="submit(user)">Add user</button>
+  </div>
+
+</div>
+
+<app-footer></app-footer>

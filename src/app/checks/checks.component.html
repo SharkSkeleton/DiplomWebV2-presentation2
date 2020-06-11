@@ -1,0 +1,14 @@
+<app-header></app-header>
+<div class="text-container">
+
+  <mat-list>
+    <div mat-subheader>Tasks</div>
+    <mat-list-item *ngFor="let task of tasks">
+      <div mat-line>{{task.project}}</div>
+      <button mat-raised-button color="primary" class="pad" (click)="openDialog()">Check task</button>
+      <mat-divider></mat-divider>
+    </mat-list-item>
+  </mat-list>
+  <br>
+</div>
+<app-footer></app-footer>

@@ -1,0 +1,17 @@
+<app-admin-panel-header></app-admin-panel-header>
+
+<div class="text-container">
+
+  <mat-list>
+    <div mat-subheader>Users</div>
+    <mat-list-item *ngFor="let user of users">
+      <mat-icon mat-list-icon class="example-header-image"></mat-icon>
+      <div mat-line>{{user.login}}</div>
+      <button mat-raised-button color="primary" class="pad" (click)="openDialog(user.login)">Change user</button>
+      <button mat-raised-button color="primary" class="pad" (click)="deleteUser(user.login)">Remove user</button>
+    </mat-list-item>
+  </mat-list>
+  <br>
+</div>
+
+<app-footer></app-footer>

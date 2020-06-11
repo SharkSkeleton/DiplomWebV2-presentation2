@@ -1,0 +1,16 @@
+<mat-checkbox [(ngModel)]="openAll">Open All</mat-checkbox>
+
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding
+                 [class.example-tree-node-odd]="isOdd(node)">
+    <button mat-icon-button matTreeNodeToggle
+    [matTreeNodeToggleRecursive]="openAll"
+    [attr.aria-label]="'toggle ' + node.filename">
+      <mat-icon>
+        {{treeControl.isExpandable(node) ? 'expand_more': 'chevron_right'}}
+      </mat-icon>
+    </button> {{node.item}}
+  </mat-tree-node>
+
+</mat-tree>

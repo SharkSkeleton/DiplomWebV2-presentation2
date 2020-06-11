@@ -1,0 +1,47 @@
+<app-header></app-header>
+
+<mat-drawer-container class="container" autosize>
+  <mat-drawer #drawer class="sidenav" mode="side">
+
+<!--    <p>Auto-resizing sidenav</p>-->
+<!--    <p *ngIf="showFiller">Lorem, ipsum dolor sit amet consectetur.</p>-->
+<!--    <button (click)="showFiller = !showFiller" mat-raised-button>-->
+<!--      Toggle extra text-->
+<!--    </button>-->
+    <app-class-tree></app-class-tree>
+
+  </mat-drawer>
+
+  <div class="sidenav-content">
+    <mat-toolbar color="warm">
+      <mat-toolbar-row>
+        <button mat-button (click)="openBottomSheet()">
+          <mat-icon>play_arrow</mat-icon>
+        </button>
+        <button mat-button>
+          <mat-icon>bug_report</mat-icon>
+        </button>
+        <button mat-button>
+          <mat-icon>stop</mat-icon>
+        </button>
+        <button mat-button (click)="saveData(codeModel.value)">
+          <mat-icon>save</mat-icon>
+        </button>
+        <button type="button" mat-button (click)="drawer.toggle()" class="showHideBtn">
+          <mat-icon>vertical_split</mat-icon> Toggle sidenav</button>
+      </mat-toolbar-row>
+    </mat-toolbar>
+
+    <ngs-code-editor
+      [theme]="theme"
+      [codeModel]="codeModel"
+      [options]="options"
+    >
+    </ngs-code-editor>
+  </div>
+
+</mat-drawer-container>
+
+<app-footer></app-footer>
+
+<!--(valueChanged)="onCodeChanged($event)"-->
