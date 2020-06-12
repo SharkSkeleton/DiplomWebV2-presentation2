@@ -1,16 +1,31 @@
-<mat-list class="allMessages">
-  <mat-list-item>Message 1</mat-list-item>
-  <mat-divider></mat-divider>
-  <mat-list-item>Message 2</mat-list-item>
-  <mat-divider></mat-divider>
-  <mat-list-item>Message 3</mat-list-item>
-</mat-list>
+<!--<mat-list class="allMessages">-->
+<!--  <mat-list-item>Message 1</mat-list-item>-->
+<!--  <mat-divider></mat-divider>-->
+<!--  <mat-list-item>Message 2</mat-list-item>-->
+<!--  <mat-divider></mat-divider>-->
+<!--  <mat-list-item>Message 3</mat-list-item>-->
+<!--</mat-list>-->
 
-<mat-form-field class="typeMessageField">
-  <mat-label>Type your message here</mat-label>
-  <textarea matInput
-            cdkTextareaAutosize
-            #autosize="cdkTextareaAutosize"
-            cdkAutosizeMinRows="1"
-            cdkAutosizeMaxRows="1" style=""></textarea>
-</mat-form-field>
+<!--  <mat-form-field class="typeMessageField">-->
+<!--    <mat-label>Type your message here...</mat-label>-->
+<!--    <textarea matInput-->
+<!--              cdkTextareaAutosize-->
+<!--              cdkAutosizeMinRows="1"-->
+<!--              cdkAutosizeMaxRows="2" style="">-->
+<!--  </textarea>-->
+<!--    &lt;!&ndash;  <input matInput&ndash;&gt;-->
+<!--    &lt;!&ndash;  >&ndash;&gt;-->
+<!--  </mat-form-field>-->
+<div style="position: relative">
+  <div style="margin: 0.7em">
+    <b>UserLogin:</b> Some
+    <hr>
+  </div>
+
+  <mat-form-field appearance="fill" style="width: 89%;position: fixed;bottom: 1.9em">
+    <mat-label>Your message</mat-label>
+    <input matInput placeholder="Message...">
+    <mat-icon matSuffix (click)="some()">send</mat-icon>
+  </mat-form-field>
+</div>
+

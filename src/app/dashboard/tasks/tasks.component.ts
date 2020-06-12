@@ -174,4 +174,23 @@ export class TasksComponent implements OnInit, OnDestroy {
 
     // this.socketService.sendOnClick();
   }
+
+  onClickEdit(task: Task) {
+    this.socketService.userEditTask(task);
+    this.pageService.getMessage().subscribe(message => {
+      if (message) {
+        this.message = message.text;
+        this.tasks = message.allTasks;
+      } else {
+        this.message = '';
+        this.tasks = null;
+      }
+    });
+  }
+
+  onClickDelete(task: Task) {
+    console.log(task);
+    this.socketService.userDeleteTask(task);
+    window.location.reload();
+  }
 }

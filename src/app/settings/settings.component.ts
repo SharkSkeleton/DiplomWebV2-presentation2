@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {PnaComponent} from './pna/pna.component';
 import {StartaComponent} from './starta/starta.component';
@@ -16,7 +16,8 @@ export interface DialogData {
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })
-export class SettingsComponent implements OnInit {
+
+export class SettingsComponent implements OnInit, OnDestroy {
 
   projects = {
     ids: [],
@@ -52,12 +53,14 @@ export class SettingsComponent implements OnInit {
   currentTemplate = '';
   currentLanguage = '';
   subArr = [];
-  constructor(public dialog: MatDialog, private socketService: SocketService) { }
+  constructor(public dialog: MatDialog, private socketService: SocketService) {
+    this.socketService.connect();
+  }
 
   ngOnInit(): void {
     this.socketService.getAllProjects().subscribe(data => {
       data.forEach(element => {
-        if (element !== undefined || element !== '') {
+        if (element !== undefined && element !== '') {
           this.projects.ids.push(element._id);
           this.projects.names.push(element.name);
           this.projects.languages.push(element.language);
@@ -146,5 +149,9 @@ export class SettingsComponent implements OnInit {
     //   id: this.projects.ids,
     // };
     console.log(this.files);
+  }
+
+  ngOnDestroy() {
+    this.socketService.disconnect();
   }
 }

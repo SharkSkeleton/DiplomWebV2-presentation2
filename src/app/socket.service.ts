@@ -8,6 +8,7 @@ export class SocketService {
   private host = 'http://localhost:3001';
   private socket: SocketIOClient.Socket;
   private tasksSubj = new Subject<any>();
+  private subTasksSubj = new Subject<any>();
 
   constructor() {
     this.socket = io(this.host); // {transports: ['webSocket']}
@@ -31,6 +32,15 @@ export class SocketService {
 
   sendUserGetTask(task: Task, status: string, id: string) {
     this.socket.emit('onGetClick', { selectedTask: task, changedStatus: status, userId: id });
+  }
+
+  userDeleteTask(task: Task) {
+    this.socket.emit('onDeleteTaskClick', { selectedTask: task });
+    // this.getTasks();
+  }
+
+  userEditTask(task: Task) {
+    this.socket.emit('onEditTaskClick', { selectedTask: task });
   }
 
   sendInProgressPage(id: string) {
@@ -108,12 +118,12 @@ export class SocketService {
   getAllProjectFiles(path) {
     this.socket.emit('GetAllProjectsFiles', {projectPath: path});
     this.socket.on('GetAllProjectsFiles', data => {
-      if (data !== null || data !== []) {
+      if (data !== null && data !== []) {
         console.log('Received data from Backend', data);
-        this.tasksSubj.next(data);
+        this.subTasksSubj.next(data);
       }
     });
-    return this.tasksSubj.asObservable();
+    return this.subTasksSubj.asObservable();
   }
 
   sendOnClick() {

@@ -258,6 +258,14 @@ function onNewWebsocketConnection(socket) {
       }
     });
   });
+
+  socket.on("onDeleteTaskClick", data => {
+    dbo.collection("Tasks").deleteOne(data.selectedTask.task, function (err, obj) {
+      if (err) throw err;
+      getAllTasks(socket, {status: 'TODO'}, 'news')
+      window
+    })
+  })
 }
 
 function startServer() {
