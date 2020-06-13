@@ -8,7 +8,7 @@ const
   url = "mongodb://localhost:27017/",
   fs = require('fs'),
   glob = require("glob"),
-  path = 'C:\\Users\\myagk\\Desktop\\DIPLOMA\\Prog\\Project\\';
+  path = 'C:\\Users\\myagk\\Desktop\\DIPLOMA\\Prog\\Diploma_Data\\Project';
 
 const SERVER_PORT = 3001;
 
@@ -265,6 +265,62 @@ function onNewWebsocketConnection(socket) {
       getAllTasks(socket, {status: 'TODO'}, 'news')
       window
     })
+  })
+
+  socket.on("GetAllChats", data => {
+    obj = []
+    dbo.collection("Messages").find({author: '', text:''}).toArray(function(err, result) {
+      if (err) throw err;
+      result.forEach(e => {obj.push({groupName: e.groupName, date: e.data});})
+      socket.emit("GetAllChats", obj);
+      socket.broadcast.emit("GetAllChats", obj);
+      console.log(obj);
+      // console.log(obj.dates);
+    });
+  })
+
+  socket.on("GetAllMessages", data => {
+    obj = []
+    dbo.collection("Messages").find({groupName: data.chat + 'M'}).toArray(function(err, result) {
+      if (err) throw err;
+      result.forEach(e => {obj.push({author: e.author, msg: e.text});})
+      socket.emit("GetAllMessages", obj);
+      socket.broadcast.emit("GetAllMessages", obj);
+      console.log(obj);
+      // console.log(obj.dates);
+    });
+  })
+
+  socket.on("userSendMessage", data => {
+    obj = []
+    let o_id = new mongo.ObjectID(data.userId);
+    dbo.collection("Users").findOne({'_id': o_id}, function(err, result) {
+      if (err) throw err;
+      dbo.collection("Messages").insertOne({groupName: data.chat + 'M', author: result.login, text: data.message, 'data': Date.now()}, function (e, r) {
+        if(e) throw e;
+        dbo.collection("Messages").find({groupName: data.chat + 'M'}).toArray(function(er, result2) {
+          if (er) throw er;
+          result2.forEach(e => {obj.push({author: e.author, msg: e.text});})
+          socket.emit("userSendMessage", obj);
+          socket.broadcast.emit("userSendMessage", obj);
+          console.log(obj);
+          // console.log(obj.dates);
+        });
+      })
+    });
+  })
+
+  socket.on("userSetCurrentProject", data => {
+    let o_id = new mongo.ObjectID(data.userId);
+    dbo.collection("Users").findOne({'_id': o_id}, function(err, result) {
+      if (err) throw err;
+      let myquery = { '_id': o_id };
+      let newvalues = { $set: {currentProject: data.projectId } };
+      dbo.collection("Users").updateOne(myquery, newvalues, function (e, r) {
+        if (e) throw(e);
+        console.log("1 doc inserted!");
+      })
+    });
   })
 }
 

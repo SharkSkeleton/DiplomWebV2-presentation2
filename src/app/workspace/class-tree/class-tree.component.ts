@@ -1,8 +1,10 @@
-import {Component, Injectable, OnInit} from '@angular/core';
+import {Component, EventEmitter, Injectable, OnInit, Output} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 import {SelectionModel} from '@angular/cdk/collections';
+import {PageService} from '../../page.service';
+import {HttpService} from '../../http.service';
 
 /**
  * Node for to-do item
@@ -22,30 +24,30 @@ export class TodoItemFlatNode {
 /**
  * The Json object for to-do list data.
  */
-const TREE_DATA = {
-  ProjectToWriteUpdateSed: {
-    'pom.xml': null,
-    'ProjectToWriteUpdateSend.iml': null,
-    src: {
-      main: {
-        java: {
-          'Main.java': null
-        },
-        resources: {},
-      },
-      test: {
-        java: {},
-      }
-    },
-    target: {
-      classes: {
-        'Main.class': null
-      },
-      generated_sources: {
-        annotation: {},
-      }
-    }
-  }
+let TREE_DATA = {
+  // ProjectToWriteUpdateSed: {
+  //   'pom.xml': null,
+  //   'ProjectToWriteUpdateSend.iml': null,
+  //   src: {
+  //     main: {
+  //       java: {
+  //         'Main.java': null
+  //       },
+  //       resources: {},
+  //     },
+  //     test: {
+  //       java: {},
+  //     }
+  //   },
+  //   target: {
+  //     classes: {
+  //       'Main.class': null
+  //     },
+  //     generated_sources: {
+  //       annotation: {},
+  //     }
+  //   }
+  // }
 };
 
 /**
@@ -108,7 +110,6 @@ export class ChecklistDatabase {
   }
 }
 
-
 @Component({
   selector: 'app-class-tree',
   templateUrl: './class-tree.component.html',
@@ -116,6 +117,9 @@ export class ChecklistDatabase {
   providers: [ChecklistDatabase]
 })
 export class ClassTreeComponent implements OnInit {
+
+  // tslint:disable-next-line:no-output-on-prefix
+  @Output() onDatePicked: EventEmitter<any> = new EventEmitter<any>();
 
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
   flatNodeMap = new Map<TodoItemFlatNode, TodoItemNode>();
@@ -139,7 +143,7 @@ export class ClassTreeComponent implements OnInit {
   checklistSelection = new SelectionModel<TodoItemFlatNode>(true /* multiple */);
 
   // tslint:disable-next-line:variable-name
-  constructor(private _database: ChecklistDatabase) {
+  constructor(private _database: ChecklistDatabase, private pageService: PageService, private httpService: HttpService) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
       this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<TodoItemFlatNode>(this.getLevel, this.isExpandable);
@@ -147,6 +151,9 @@ export class ClassTreeComponent implements OnInit {
 
     _database.dataChange.subscribe(data => {
       this.dataSource.data = data;
+    });
+    this.pageService.getMessage().subscribe(data => {
+      TREE_DATA = data.myTree;
     });
   }
 
@@ -276,7 +283,11 @@ export class ClassTreeComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  someClick(name) {
+  chooseFile(name) {
+    this.httpService.postOpenFile(window.sessionStorage.getItem('id'), name).subscribe(data => {
+      console.log(data);
+      this.onDatePicked.emit(data);
+    });
     console.log(name);
   }
 

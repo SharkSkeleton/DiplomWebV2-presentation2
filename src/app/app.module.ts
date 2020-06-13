@@ -57,6 +57,7 @@ import { AddUserAnswerComponent } from './admin-panel/add-user/add-user-answer/a
 import {SocketService} from './socket.service';
 import {SocketWorkSpace} from './socket-work-space.service';
 import {PostWorkspaceService} from './post-workspace.service';
+import { EditorComponent } from './workspace/editor/editor.component';
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import {PostWorkspaceService} from './post-workspace.service';
     CheckPopComponent,
     AdminPanelHeaderComponent,
     AddUserAnswerComponent,
+    EditorComponent,
   ],
   imports: [
     BrowserModule,

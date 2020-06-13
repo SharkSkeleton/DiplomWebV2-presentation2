@@ -44,11 +44,12 @@
     <br>
 
     <div mat-dialog-content>
-      <mat-form-field appearance="fill">
+      <mat-form-field>
         <mat-label>Start file</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let file of files" [value]="file">{{file}}</mat-option>
-        </mat-select>
+<!--        <mat-select>-->
+<!--          <mat-option *ngFor="let file of files" [value]="file">{{file}}</mat-option>-->
+<!--        </mat-select>-->
+        <input matInput disabled [(ngModel)]="currentStartFile">
       </mat-form-field>
     </div>
     <div>

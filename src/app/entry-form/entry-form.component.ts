@@ -34,9 +34,13 @@ export class EntryFormComponent {
   }
 
   some = (data) => {
-    this.role = data.role;
-    window.sessionStorage.setItem('id', data.id);
-    data.role === 'admin' ? this.router.navigate(['/admin']) : this.router.navigate(['home']);
+    if (data.errMsg === 'Wrong login or password!') {
+      alert('Wrong login or password!');
+    } else {
+      this.role = data.role;
+      window.sessionStorage.setItem('id', data.id);
+      data.role === 'admin' ? this.router.navigate(['/admin']) : this.router.navigate(['home']);
+    }
   }
 
   submit(user: User) {

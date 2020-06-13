@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {PageService} from '../page.service';
+import {PageService} from '../../page.service';
 import {Subscription} from 'rxjs';
 import {Task} from '../../task';
 import {HttpService} from '../../http.service';
@@ -37,7 +37,8 @@ export class TasksComponent implements OnInit, OnDestroy {
   message: string;
   subscription: Subscription;
 
-  constructor(private pageService: PageService, private httpService: HttpService, private socketService: SocketService) {
+  constructor(private pageService: PageService, private httpService: HttpService,
+              private socketService: SocketService) {
     this.pageService.getMessage().subscribe(message => {
       if (message) {
         this.message = message.text;

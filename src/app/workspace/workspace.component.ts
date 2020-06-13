@@ -5,6 +5,8 @@ import {BottomSheetComponent} from './bottom-sheet/bottom-sheet.component';
 import {SocketWorkSpace} from '../socket-work-space.service';
 import {PostWorkspaceService} from '../post-workspace.service';
 import {User} from '../user';
+import {PageService} from '../page.service';
+import {HttpService} from '../http.service';
 
 @Component({
   selector: 'app-workspace',
@@ -12,12 +14,18 @@ import {User} from '../user';
   styleUrls: ['./workspace.component.css']
 })
 export class WorkspaceComponent implements OnInit, OnDestroy {
-
+  good = false;
+  code = '';
   // tslint:disable-next-line:variable-name
-  constructor(private _bottomSheet: MatBottomSheet, private socketService: SocketWorkSpace, private httpService: PostWorkspaceService) {
+  constructor(private _bottomSheet: MatBottomSheet, private socketService: SocketWorkSpace,
+              private myHttpService: HttpService, private httpService: PostWorkspaceService, private pageService: PageService) {
+    this.myHttpService.postSetProject(window.sessionStorage.getItem('id')).subscribe(data => {
+      this.pageService.sendTreeData(data);
+    });
   }
 
-  theme = 'vs-light';
+
+  // theme = 'vs-light';
 
   // content: string = 'public class Main {\n' +
   //   '@lombok.SneakyThrows\n' +
@@ -40,25 +48,27 @@ export class WorkspaceComponent implements OnInit, OnDestroy {
   //   '\n' +
   //   'System.out.println(response.toString());\n' +
   //   '}\n' +
+  // //   '}';
+  // content: string = 'public class Main {\n' +
+  //   '\tpublic static void main(String[] args) {\n' +
+  //   '\t\tSystem.out.println("Hello World!");\n' +
+  //   '\t}\n' +
   //   '}';
-  content: string = 'public class Main {\n' +
-    '\tpublic static void main(String[] args) {\n' +
-    '\t\tSystem.out.println("Hello World!");\n' +
-    '\t}\n' +
-    '}';
 
-  codeModel: CodeModel = {
-    language: 'java',
-    uri: '',
-    value: this.content,
-  };
-
-  options = {
-    contextmenu: true,
-    minimap: {
-      enabled: true,
-    },
-  };
+  // content: string;
+  //
+  // codeModel: CodeModel = {
+  //   language: 'java',
+  //   uri: '',
+  //   value: this.content,
+  // };
+  //
+  // options = {
+  //   contextmenu: true,
+  //   minimap: {
+  //     enabled: true,
+  //   },
+  // };
 
   ngOnInit(): void {
   }
@@ -68,17 +78,35 @@ export class WorkspaceComponent implements OnInit, OnDestroy {
   }
 
   openBottomSheet(): void {
-    this.httpService.postSend('e4a501eb-9fb7-4373-bab7-a6fd14e69eeb', 'admin').subscribe(
-      (data) => { console.log(data);  },
-      error => console.log(error)
-    );
+    let obj;
+    this.myHttpService.postGetProject(window.sessionStorage.getItem('id')).subscribe(data => {
+      obj = data;
+      this.httpService.postSend(obj.id, obj.login).subscribe(
+        (resultData) => { console.log(resultData);  },
+        error => console.log(error)
+      );
+    });
     // this.socketService.sendMessage('5ed74eaa045af72d943c6a5e', 'Sasha').subscribe(data =>
     // console.log(data));
     this._bottomSheet.open(BottomSheetComponent);
   }
   // this.socketService.connect();
 
+  public doSomething(date: any) {
+    this.good = !this.good;
+    this.code = date;
+    // console.log(`1. ${this.codeModel.value}`);
+    // this.content = date;
+    // console.log(`2. ${this.codeModel.value}`);
+  }
+
+  some() {
+    console.log('SSS');
+    // this.codeModel.value = this.content;
+  }
+
   ngOnDestroy(): void {
+    // this.pageService.sendTreeData({});
   }
 
 }

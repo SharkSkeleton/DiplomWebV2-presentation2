@@ -1,16 +1,57 @@
 import {CdkTextareaAutosize} from '@angular/cdk/text-field';
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {SocketService} from '../../socket.service';
+import {PageService} from '../../page.service';
+import {Section} from '../chats.component';
 
 @Component({
   selector: 'app-chat-messaging',
   templateUrl: './chat-messaging.component.html',
   styleUrls: ['./chat-messaging.component.css']
 })
-export class ChatMessagingComponent {
+export class ChatMessagingComponent implements OnInit, OnDestroy {
 
-  constructor() {}
+  myGroups: Section[];
+  msgObj = [
+    {
+      author: 'Misha',
+      msg: 'Hello Sasha'
+    },
+    {
+      author: 'Sasha',
+      msg: 'Hello Misha'
+    }
+  ];
 
-  some() {
-    alert('Some');
+  msg: '';
+
+  chatName: string;
+
+  constructor(private socketService: SocketService, private pageService: PageService) {
+    this.socketService.connect();
+    this.pageService.getMessage().subscribe(data => {
+      this.msgObj = data.allMsg;
+      this.chatName = data.text;
+      this.myGroups = data.allGroups;
+      // this.socketService.getAllMessages(data.text).subscribe(msg => {
+      //   console.log(data.text);
+      //   this.msgObj = msg;
+      //   console.log(msg);
+      // });
+    });
+  }
+
+  ngOnInit() {
+
+  }
+
+  saveMsg(msg: string) {
+    alert(`User id: ${window.sessionStorage.getItem('id')} and he's message: ${msg}`);
+    this.socketService.sendMessage(window.sessionStorage.getItem('id'), this.chatName, msg).subscribe(data =>
+    this.msgObj = data);
+  }
+
+  ngOnDestroy() {
+    // this.socketService.disconnect();
   }
 }

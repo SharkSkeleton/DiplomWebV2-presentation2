@@ -17,7 +17,7 @@ export class HttpService {
 
   postAddedUser(user: User) {
     const body = { login: user.login, password: user.password, role: user.role, projects: user.projects,
-      currentProject: user.currentProject, tasks: user.tasks, commonTasks: user.commonTasks, messages: user.messages, surName: user.surName,
+      currentProject: user.currentProject, tasks: user.tasks, commonTasks: user.commonTasks, surName: user.surName,
     lastName: user.lastName, birthDate: user.birthDate, city: user.city, about: user.about, picture: user.picture};
     return this.http.post('http://localhost:3000/admin-panel/add-user/', body);
   }
@@ -77,5 +77,20 @@ export class HttpService {
   postGetAllFilesOFProject(path) {
     const body = { projectPath: path };
     return this.http.post('http://localhost:3000/settings/', body);
+  }
+
+  postSetProject(uId: string) {
+    const body = { id: uId };
+    return this.http.post('http://localhost:3000/work-space/', body);
+  }
+
+  postOpenFile(uId: string, fileName: string) {
+    const body = { id: uId, fName: fileName };
+    return this.http.post('http://localhost:3000/work-space/data', body);
+  }
+
+  postGetProject(uId: string) {
+    const body = { id: uId };
+    return this.http.post('http://localhost:3000/work-space/user-get', body);
   }
 }

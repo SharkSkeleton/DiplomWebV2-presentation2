@@ -24,6 +24,7 @@
     "@ngstack/code-editor": "^1.0.0",
     "@stomp/stompjs": "^5.4.4",
     "@types/socket.io": "^2.1.8",
+    "directory-tree": "^2.2.4",
     "express": "^4.17.1",
     "mongodb": "^3.5.8",
     "net": "^1.0.2",

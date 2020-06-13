@@ -4,6 +4,7 @@ import {PnaComponent} from './pna/pna.component';
 import {StartaComponent} from './starta/starta.component';
 import {SocketService} from '../socket.service';
 import {HttpService} from '../http.service';
+import {split} from 'ts-node';
 
 export interface DialogData {
   login: string;
@@ -24,7 +25,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     names: [],
     languages: [],
     templates: [],
-    paths: []
+    paths: [],
+    launchFilePaths: []
   };
 
   project = [];
@@ -49,9 +51,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
   password: string;
   role: string;
   index: number;
+  currentId = '';
   currentPath = '';
   currentTemplate = '';
   currentLanguage = '';
+  currentStartFile = '';
   subArr = [];
   constructor(public dialog: MatDialog, private socketService: SocketService) {
     this.socketService.connect();
@@ -59,6 +63,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.socketService.getAllProjects().subscribe(data => {
+      this.projects.ids = [];
+      this.projects.names = [];
+      this.projects.languages = [];
+      this.projects.templates = [];
+      this.projects.paths = [];
+      this.projects.launchFilePaths = [];
       data.forEach(element => {
         if (element !== undefined && element !== '') {
           this.projects.ids.push(element._id);
@@ -66,6 +76,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
           this.projects.languages.push(element.language);
           this.projects.templates.push(element.template);
           this.projects.paths.push(element.path);
+          this.projects.launchFilePaths.push(element.launchFile);
         }
       });
       // this.project = data;
@@ -124,10 +135,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.currentLanguage = this.projects.languages[this.index];
     this.currentTemplate = this.projects.templates[this.index];
     this.currentPath = this.projects.paths[this.index];
+    this.currentStartFile = this.projects.launchFilePaths[this.index];
+    this.currentId = this.projects.ids[this.index];
     // const self = this;
-    this.socketService.getAllProjectFiles(this.currentPath).subscribe(data => {
-      this.files = data;
-    });
+    // this.socketService.getAllProjectFiles(this.currentPath).subscribe(data => {
+    //   this.files = data;
+    //   this.currentStartFile = this.files[this.index].replace('/', '');
+    // });
     console.log(this.files);
     // this.files.forEach(el => {
     //   if (el.indexOf('/') !== -1) {
@@ -148,7 +162,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     // this.cP = {
     //   id: this.projects.ids,
     // };
-    console.log(this.files);
+    // console.log(this.currentId);
+    this.socketService.sendCurrentProjectId(sessionStorage.getItem('id'), this.currentId);
   }
 
   ngOnDestroy() {

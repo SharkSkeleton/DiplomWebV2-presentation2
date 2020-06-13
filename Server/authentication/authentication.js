@@ -8,6 +8,8 @@ const url = "mongodb://localhost:27017/";
 const fs = require('fs'),
   glob = require("glob"),
   path = 'C:\\Users\\myagk\\Desktop\\DIPLOMA\\Prog\\Project\\';
+const dirTree = require('directory-tree');
+const { dir } = require('console');
 // const server = require('http').Server(app);
 // const io = require('socket.io')(server);
 
@@ -40,6 +42,9 @@ app.post("/entry-form/", jsonParser, function (request, response) {
         if (login === result.login && password === result.password) {
           response.json({"role": result.role, "id": result._id});
           db.close();
+        } else {
+          response.json({"errMsg": "Wrong login or password!"});
+          db.close();
         }
       }
     });
@@ -56,8 +61,7 @@ app.post("/admin-panel/add-user/", jsonParser, function (request, response) {
     login: request.body.login,
     password: request.body.password,
     role: request.body.role,
-    currentProject: [],
-    messages: [],
+    currentProject: '',
     name: '',
     surName: '',
     lastName: '',
@@ -239,6 +243,146 @@ app.post("/settings/add-task/", jsonParser, function (request, response) {
 
       if (result !== null) {
         db.close();
+      }
+    });
+  });
+});
+
+
+function getTree(treePart) {
+  let childrens = treePart['children'];
+  var o={}
+  var arr={}
+  if(typeof childrens !== 'undefined' && childrens.length > 0) {
+    childrens.forEach(function(item, i, childrens) {
+      arr[item['name']]=getTree(item)
+    });
+  } else {
+    if(treePart['type']!=='directory'){
+      arr=null
+    }
+  }
+  o[treePart['name']]=arr
+  return arr;
+}
+
+function getTreeObj(response, pId) {
+
+  // const MongoClient = require('mongodb').MongoClient;
+  // const url = "mongodb://localhost:27017/";
+  // const mongo = require('mongodb');
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    const dbo = db.db("DiplomaDB");
+    let dir;
+
+    let o_id = new mongo.ObjectID(pId);
+    let oldData = { '_id': o_id };
+
+    dbo.collection("Projects").findOne(oldData, function(err, result) {
+      if (err) throw err;
+      dir = result.path;
+      const tree = dirTree(dir);
+      let my_directory_tree = {}
+      my_directory_tree[tree['name']] = getTree(tree);
+
+      // console.log(my_directory_tree);
+      response.json(my_directory_tree);
+      db.close();
+    });
+  });
+}
+
+// user get his current project
+app.post("/work-space/", jsonParser, function (request, response) {
+
+  console.log(request.body);
+  if(!request.body) return response.sendStatus(400);
+  let o_id = new mongo.ObjectID(request.body.id);
+  let treeObj = {};
+
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    let dbo = db.db("DiplomaDB");
+    dbo.collection("Users").findOne({'_id': o_id}, function(err, result) {
+      if (err) throw err;
+      if (result !== null) {
+        getTreeObj(response, result.currentProject);
+      }
+    });
+  });
+});
+
+function getDataFromFile(response, pId, fName) {
+
+	let o_id = new mongo.ObjectID(pId);
+	MongoClient.connect(url, function(err, db) {
+	  if (err) throw err;
+	  const dbo = db.db("DiplomaDB");
+	  let oldData = { '_id': o_id };
+
+	  dbo.collection("Projects").findOne(oldData, function(err, result) {
+		if (err) throw err;
+		// dir = result.path;
+		let getDirectories = function (src, callback) {
+			glob(src + '/**/*', callback);
+		  };
+		  getDirectories(result.path, function (err, res) {
+			if (err) {
+			  console.log('Error', err);
+			} else {
+			//   res.forEach()console.log(res);
+				for(let i = 0; i < res.length; i++) {
+					if(res[i].includes(fName)) {
+						// console.log(res[i])
+						fs.readFile(res[i], 'utf8', function(err, contents) {
+							console.log(contents);
+							response.json(contents);
+						});
+					}
+				}
+			}
+		  });
+		// console.log(my_directory_tree);
+
+		db.close();
+	  });
+	});
+}
+
+// user get his current project
+app.post("/work-space/data", jsonParser, function (request, response) {
+
+  console.log(request.body);
+  if(!request.body) return response.sendStatus(400);
+  let o_id = new mongo.ObjectID(request.body.id);
+
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    let dbo = db.db("DiplomaDB");
+    dbo.collection("Users").findOne({'_id': o_id}, function(err, result) {
+      if (err) throw err;
+      if (result !== null) {
+        getDataFromFile(response, result.currentProject, request.body.fName);
+      }
+    });
+  });
+});
+
+// user get his current project
+app.post("/work-space/user-get", jsonParser, function (request, response) {
+
+  console.log(request.body);
+  if(!request.body) return response.sendStatus(400);
+  let o_id = new mongo.ObjectID(request.body.id);
+
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    let dbo = db.db("DiplomaDB");
+    dbo.collection("Users").findOne({'_id': o_id}, function(err, result) {
+      if (err) throw err;
+      if (result !== null) {
+        response.json({id: result.currentProject, login: result.login});
       }
     });
   });

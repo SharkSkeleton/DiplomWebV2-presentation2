@@ -4,10 +4,10 @@
   <mat-drawer mode="side" opened>
     <mat-list>
       <div mat-subheader>Favorites</div>
-      <mat-list-item *ngFor="let favorite of favorites" (click)="ChatOpen()">
+      <mat-list-item *ngFor="let favorite of favorites" (click)="ChatOpen(favorite.groupName)">
         <div mat-list-avatar class="header-image"></div>
-        <div mat-line>{{favorite.name}}</div>
-        <div mat-line> {{favorite.updated | date}} </div>
+        <div mat-line>{{favorite.groupName}}</div>
+        <div mat-line> {{favorite.date}} </div>
       </mat-list-item>
     </mat-list>
   </mat-drawer>

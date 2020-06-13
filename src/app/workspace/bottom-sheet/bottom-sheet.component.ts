@@ -1,6 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatBottomSheetRef} from '@angular/material/bottom-sheet';
 import {SocketWorkSpace} from '../../socket-work-space.service';
+import {PageService} from '../../page.service';
 
 @Component({
   selector: 'app-bottom-sheet',
@@ -12,7 +13,7 @@ export class BottomSheetComponent implements OnInit, OnDestroy {
   result = '';
 
   // tslint:disable-next-line:variable-name
-  constructor(private _bottomSheetRef: MatBottomSheetRef<BottomSheetComponent>, private socketService: SocketWorkSpace) {
+  constructor(private _bottomSheetRef: MatBottomSheetRef<BottomSheetComponent>, private socketService: SocketWorkSpace, private pageService: PageService) {
   }
 
   ngOnInit(): void {
@@ -24,16 +25,17 @@ export class BottomSheetComponent implements OnInit, OnDestroy {
     // );
     // Open connection with server socket
     const stompClient = this.socketService.connect();
+
     stompClient.connect({}, frame => {
 
       // Subscribe to notification topic
-      stompClient.subscribe('/helloword_admin', notifications => {
+      stompClient.subscribe('/hellopython_admin', notifications => {
 
         // Update notifications attribute with the recent messsage sent from the server
         this.result += notifications.body;
         console.log(notifications);
       });
-      stompClient.send('/helloword_admin\\input', {}, 'aaaaa');
+      stompClient.send('/hellopython_admin/input', {}, 'aaaaa');
     });
   }
 

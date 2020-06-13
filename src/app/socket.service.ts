@@ -26,8 +26,17 @@ export class SocketService {
   }
 
   // EMITTER
-  sendMessage(msg: string) {
-    this.socket.emit('news', { message: msg });
+  sendMessage(uId: string, chatName: string, msg: string) {
+    this.socket.emit('userSendMessage', { userId: uId, chat: chatName, message: msg });
+    this.socket.on('userSendMessage', data => {
+      console.log('Received data from Backend', data);
+      this.tasksSubj.next(data);
+    });
+    return this.tasksSubj.asObservable();
+  }
+
+  sendCurrentProjectId(uId: string, pId: string) {
+    this.socket.emit('userSetCurrentProject', { userId: uId, projectId: pId });
   }
 
   sendUserGetTask(task: Task, status: string, id: string) {
@@ -120,6 +129,26 @@ export class SocketService {
     this.socket.on('GetAllProjectsFiles', data => {
       if (data !== null && data !== []) {
         console.log('Received data from Backend', data);
+        this.subTasksSubj.next(data);
+      }
+    });
+    return this.subTasksSubj.asObservable();
+  }
+
+  getAllChats() {
+    this.socket.emit('GetAllChats', 'msg');
+    this.socket.on('GetAllChats', data => {
+      console.log(data);
+      this.tasksSubj.next(data);
+    });
+    return this.tasksSubj.asObservable();
+  }
+
+  getAllMessages(chatName: string) {
+    this.socket.emit('GetAllMessages', {chat: chatName});
+    this.socket.on('GetAllMessages', data => {
+      if (data) {
+        console.log(data);
         this.subTasksSubj.next(data);
       }
     });

@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {PageService} from './page.service';
+import {PageService} from '../page.service';
 import {HttpService} from '../http.service';
 import {Task} from '../task';
 import {User} from '../user';

@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {SocketService} from '../socket.service';
+import {PageService} from '../page.service';
 
 export interface Section {
-  name: string;
-  updated: Date;
+  groupName: string;
+  date: string;
 }
 
 @Component({
@@ -10,31 +12,39 @@ export interface Section {
   templateUrl: './chats.component.html',
   styleUrls: ['./chats.component.css']
 })
-export class ChatsComponent {
+export class ChatsComponent implements OnInit, OnDestroy {
 
   done = false;
 
   favorites: Section[] = [
     {
-      name: 'Back-end',
-      updated: new Date('1/1/20'),
-    },
-    {
-      name: 'Front-end',
-      updated: new Date('1/17/20'),
-    },
-    {
-      name: 'Full-stack',
-      updated: new Date('1/28/20'),
-    },
-    {
-      name: 'QA',
-      updated: new Date('2/28/20'),
+      groupName: 'TROUBLES with DB',
+      date: '',
     }
   ];
 
-  ChatOpen() {
+  obj: [];
+
+  constructor(private socketService: SocketService, private pageService: PageService) {
+  }
+
+  ngOnInit() {
+    this.socketService.connect();
+    this.socketService.getAllChats().subscribe(data => {
+      this.favorites = data;
+    });
+  }
+
+  ChatOpen(chatName) {
     this.done = true;
+    this.socketService.getAllMessages(chatName).subscribe(data => {
+      this.pageService.sendMessage(chatName, [], data, this.favorites);
+    });
+    // this.pageService.sendMessage('');
+  }
+
+  ngOnDestroy() {
+    this.socketService.disconnect();
   }
 
 }

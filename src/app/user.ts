@@ -6,7 +6,6 @@ export class User {
   currentProject?: string;
   tasks?: string;
   commonTasks?: string;
-  messages?: string[];
   name?: string;
   surName?: string;
   lastName?: string;

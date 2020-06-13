@@ -17,15 +17,15 @@
 <!--    &lt;!&ndash;  >&ndash;&gt;-->
 <!--  </mat-form-field>-->
 <div style="position: relative">
-  <div style="margin: 0.7em">
-    <b>UserLogin:</b> Some
+  <div style="margin: 0.7em" *ngFor="let obj of msgObj">
+    <b>{{obj.author}}:</b> {{obj.msg}}
     <hr>
   </div>
 
   <mat-form-field appearance="fill" style="width: 89%;position: fixed;bottom: 1.9em">
     <mat-label>Your message</mat-label>
-    <input matInput placeholder="Message...">
-    <mat-icon matSuffix (click)="some()">send</mat-icon>
+    <input matInput placeholder="Message..." [(ngModel)]="msg" (keydown.enter)="saveMsg(msg)">
+    <mat-icon matSuffix (click)="saveMsg(msg)">send</mat-icon>
   </mat-form-field>
 </div>
 

@@ -8,7 +8,7 @@
 <!--    <button (click)="showFiller = !showFiller" mat-raised-button>-->
 <!--      Toggle extra text-->
 <!--    </button>-->
-    <app-class-tree></app-class-tree>
+    <app-class-tree (onDatePicked)="doSomething($event)"></app-class-tree>
 
   </mat-drawer>
 
@@ -24,7 +24,7 @@
         <button mat-button>
           <mat-icon>stop</mat-icon>
         </button>
-        <button mat-button (click)="saveData(codeModel.value)">
+        <button mat-button (click)="saveData('s')">
           <mat-icon>save</mat-icon>
         </button>
         <button type="button" mat-button (click)="drawer.toggle()" class="showHideBtn">
@@ -32,12 +32,16 @@
       </mat-toolbar-row>
     </mat-toolbar>
 
-    <ngs-code-editor
-      [theme]="theme"
-      [codeModel]="codeModel"
-      [options]="options"
-    >
-    </ngs-code-editor>
+    <div *ngIf="good">
+      <app-editor [data]="code"></app-editor>
+    </div>
+<!--    <ngs-code-editor-->
+<!--      [theme]="theme"-->
+<!--      [codeModel]="codeModel"-->
+<!--      [options]="options"-->
+<!--      (mousedown)="some()"-->
+<!--    >-->
+<!--    </ngs-code-editor>-->
   </div>
 
 </mat-drawer-container>
