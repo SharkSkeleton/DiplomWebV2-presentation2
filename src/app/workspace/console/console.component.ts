@@ -18,13 +18,13 @@ export class ConsoleComponent implements OnInit {
     stompClient.connect({}, frame => {
 
       // Subscribe to notification topic
-      stompClient.subscribe('/hellopython_admin', notifications => {
+      stompClient.subscribe('/hellojava_admin', notifications => {
 
         // Update notifications attribute with the recent messsage sent from the server
         this.consoleData += notifications.body;
         console.log(notifications);
       });
-      stompClient.send('/hellopython_admin/input', {}, 'aaaaa');
+      // stompClient.send('/hellopython_admin/input', {}, 'aaaaa');
     });
   }
 

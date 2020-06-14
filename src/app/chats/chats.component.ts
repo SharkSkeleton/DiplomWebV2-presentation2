@@ -33,6 +33,8 @@ export class ChatsComponent implements OnInit, OnDestroy {
     this.socketService.getAllChats().subscribe(data => {
       this.favorites = data;
     });
+    this.pageService.getMessage().subscribe(data => {
+    });
   }
 
   ChatOpen(chatName) {

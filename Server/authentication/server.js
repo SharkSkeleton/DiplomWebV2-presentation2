@@ -8,7 +8,7 @@ const
   url = "mongodb://localhost:27017/",
   fs = require('fs'),
   glob = require("glob"),
-  path = 'C:\\Users\\myagk\\Desktop\\DIPLOMA\\Prog\\Diploma_Data\\Project';
+  path = 'C:\\Users\\myagk\\Desktop\\DIPLOMA\\Prog\\Diploma_Data\\Project\\';
 
 const SERVER_PORT = 3001;
 

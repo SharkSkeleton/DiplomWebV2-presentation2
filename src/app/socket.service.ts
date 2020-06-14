@@ -30,9 +30,9 @@ export class SocketService {
     this.socket.emit('userSendMessage', { userId: uId, chat: chatName, message: msg });
     this.socket.on('userSendMessage', data => {
       console.log('Received data from Backend', data);
-      this.tasksSubj.next(data);
+      this.subTasksSubj.next(data);
     });
-    return this.tasksSubj.asObservable();
+    return this.subTasksSubj.asObservable();
   }
 
   sendCurrentProjectId(uId: string, pId: string) {

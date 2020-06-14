@@ -92,7 +92,7 @@ export class WorkspaceComponent implements OnInit, OnDestroy {
     });
     // this.socketService.sendMessage('5ed74eaa045af72d943c6a5e', 'Sasha').subscribe(data =>
     // console.log(data));
-    this._bottomSheet.open(BottomSheetComponent);
+    // this._bottomSheet.open(BottomSheetComponent);
   }
   // this.socketService.connect();
 

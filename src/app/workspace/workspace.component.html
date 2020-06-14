@@ -11,20 +11,20 @@
     <app-class-tree [myTreeData]="myGOODData" (onDatePicked)="doSomething($event)"></app-class-tree>
   </mat-drawer>
 
-  <mat-drawer #consoleDrawer class="sidenav" mode="side" position="end">
+  <mat-drawer #consoleDrawer class="sidenav2" mode="side" position="end">
     <app-console [consoleData]="consoleData"></app-console>
   </mat-drawer>
 
   <div class="sidenav-content">
     <mat-toolbar color="warm">
       <mat-toolbar-row>
-        <button mat-button (click)="openBottomSheet()">
+        <button mat-button (click)="consoleDrawer.toggle(); openBottomSheet()">
           <mat-icon>play_arrow</mat-icon>
         </button>
-<!--        <button mat-button>-->
-<!--          <mat-icon>bug_report</mat-icon>-->
-<!--        </button>-->
-        <button mat-button (click)="consoleDrawer.toggle()">
+        <button mat-button>
+          <mat-icon>backup icon</mat-icon>
+        </button>
+        <button mat-button (click)="consoleDrawer.toggle(); openBottomSheet()">
           <mat-icon>stop</mat-icon>
         </button>
         <button mat-button (click)="saveData('s')">
