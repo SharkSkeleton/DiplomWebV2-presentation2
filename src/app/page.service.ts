@@ -14,13 +14,14 @@ interface Message {
 export class PageService {
 
   private subject = new Subject<any>();
+  private subject2 = new Subject<any>();
 
   sendMessage(message: string, tasks?: Task[], msgs?: Message[], groups?: Section[]) {
     this.subject.next({ text: message, allTasks: tasks, allMsg: msgs, allGroups: groups });
   }
 
   sendTreeData(tree) {
-    this.subject.next({myTree: tree});
+    this.subject2.next({myTree: tree});
   }
 
   sendFileData(data: string) {
@@ -37,5 +38,9 @@ export class PageService {
 
   getMessage(): Observable<any> {
     return this.subject.asObservable();
+  }
+
+  getTreeMessage(): Observable<any> {
+    return this.subject2.asObservable();
   }
 }

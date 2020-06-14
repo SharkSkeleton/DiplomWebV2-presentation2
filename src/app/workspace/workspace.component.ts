@@ -16,12 +16,11 @@ import {HttpService} from '../http.service';
 export class WorkspaceComponent implements OnInit, OnDestroy {
   good = false;
   code = '';
+  consoleData;
+  myGOODData = {};
   // tslint:disable-next-line:variable-name
   constructor(private _bottomSheet: MatBottomSheet, private socketService: SocketWorkSpace,
               private myHttpService: HttpService, private httpService: PostWorkspaceService, private pageService: PageService) {
-    this.myHttpService.postSetProject(window.sessionStorage.getItem('id')).subscribe(data => {
-      this.pageService.sendTreeData(data);
-    });
   }
 
 
@@ -71,6 +70,11 @@ export class WorkspaceComponent implements OnInit, OnDestroy {
   // };
 
   ngOnInit(): void {
+    this.myHttpService.postSetProject(window.sessionStorage.getItem('id')).subscribe(data => {
+      // this.myGOODData = data;
+      this.pageService.sendTreeData(data);
+      // console.log('Input new data:', this.myGOODData);
+    });
   }
 
   saveData(data) {
@@ -101,7 +105,7 @@ export class WorkspaceComponent implements OnInit, OnDestroy {
   }
 
   some() {
-    console.log('SSS');
+    alert('SSS');
     // this.codeModel.value = this.content;
   }
 

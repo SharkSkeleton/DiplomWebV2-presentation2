@@ -58,6 +58,7 @@ import {SocketService} from './socket.service';
 import {SocketWorkSpace} from './socket-work-space.service';
 import {PostWorkspaceService} from './post-workspace.service';
 import { EditorComponent } from './workspace/editor/editor.component';
+import { ConsoleComponent } from './workspace/console/console.component';
 
 @NgModule({
   declarations: [
@@ -90,6 +91,7 @@ import { EditorComponent } from './workspace/editor/editor.component';
     AdminPanelHeaderComponent,
     AddUserAnswerComponent,
     EditorComponent,
+    ConsoleComponent,
   ],
   imports: [
     BrowserModule,

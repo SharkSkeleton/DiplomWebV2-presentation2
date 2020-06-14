@@ -73,6 +73,7 @@ function onNewWebsocketConnection(socket) {
   onlineClients.add(socket.id);
 
   let toDoQuery = {executor: ""};
+  let doneQuery = {status: "Done"};
   getAllTasks(socket, toDoQuery, 'news');
 
   socket.on("disconnect", () => {
@@ -151,16 +152,10 @@ function onNewWebsocketConnection(socket) {
     // let executorInProgress;
     dbo.collection("Users").find({'_id': o_id}, {projection: { _id: 0, login: 1}}).toArray(function (err, result) {
       if (result !== null) {
-        dbo.collection("Tasks").find({executor: result[0].login, mark: '100'}).toArray(function (err, res) {
+        dbo.collection("Tasks").find({executor: result[0].login, status: 'Done'}).toArray(function (err, res) {
           if (res !== null) {
-            dbo.collection("Tasks").updateOne({executor: result[0].login, mark: '100'}, {$set: {status: 'done'}}, function (e, r) {
-              if (e) {
-                throw(e);
-              } else {
-                let onDoneQuery = {executor: result[0].login, mark: data.userMark, status: 'done'};
-                getAllTasks(socket, onDoneQuery, 'DonePage');
-              }
-            })
+            let onDoneQuery = {executor: result[0].login, status: 'Done'};
+            getAllTasks(socket, onDoneQuery, 'DonePage');
           }
         });
       }
@@ -259,14 +254,6 @@ function onNewWebsocketConnection(socket) {
     });
   });
 
-  socket.on("onDeleteTaskClick", data => {
-    dbo.collection("Tasks").deleteOne(data.selectedTask.task, function (err, obj) {
-      if (err) throw err;
-      getAllTasks(socket, {status: 'TODO'}, 'news')
-      window
-    })
-  })
-
   socket.on("GetAllChats", data => {
     obj = []
     dbo.collection("Messages").find({author: '', text:''}).toArray(function(err, result) {
@@ -342,6 +329,22 @@ function onNewWebsocketConnection(socket) {
       })
     });
   })
+
+  socket.on("onDeleteTaskClick",  data => {
+    dbo.collection("Tasks").deleteOne(data.selectedTask, function (err, obj) {
+      if (err) throw err;
+      getAllTasks(socket, toDoQuery, 'news');
+    })
+  });
+
+  socket.on("onDeleteDoneTaskClick",  data => {
+    console.log('SSSSSSSSSSSSSSSSSSSSSSSSS');
+    console.log(data.myTask);
+    dbo.collection("Tasks").deleteOne(data.myTask, function (err, obj) {
+      if (err) throw err;
+      getAllTasks(socket, doneQuery, 'DonePage');
+    })
+  });
 }
 
 function startServer() {

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Injectable, OnInit, Output} from '@angular/core';
+import {AfterContentInit, Component, EventEmitter, Injectable, Input, OnInit, Output} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
@@ -116,8 +116,9 @@ export class ChecklistDatabase {
   styleUrls: ['./class-tree.component.css'],
   providers: [ChecklistDatabase]
 })
-export class ClassTreeComponent implements OnInit {
+export class ClassTreeComponent implements OnInit, AfterContentInit {
 
+  @Input() myTreeData;
   // tslint:disable-next-line:no-output-on-prefix
   @Output() onDatePicked: EventEmitter<any> = new EventEmitter<any>();
 
@@ -141,7 +142,7 @@ export class ClassTreeComponent implements OnInit {
 
   /** The selection for checklist */
   checklistSelection = new SelectionModel<TodoItemFlatNode>(true /* multiple */);
-
+  myObj;
   // tslint:disable-next-line:variable-name
   constructor(private _database: ChecklistDatabase, private pageService: PageService, private httpService: HttpService) {
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
@@ -152,9 +153,9 @@ export class ClassTreeComponent implements OnInit {
     _database.dataChange.subscribe(data => {
       this.dataSource.data = data;
     });
-    this.pageService.getMessage().subscribe(data => {
-      TREE_DATA = data.myTree;
-    });
+    // this.pageService.getMessage().subscribe(data => {
+    //   TREE_DATA = data.myTree;
+    // });
   }
 
   getLevel = (node: TodoItemFlatNode) => node.level;
@@ -281,10 +282,24 @@ export class ClassTreeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // console.log(this.myTreeData);
+    // this.myObj = this.myTreeData;
+    // console.log('ssssssssssssssss');
+    // console.log(this.myObj);
+    this.pageService.getTreeMessage().subscribe(data => {
+      TREE_DATA = data.myTree;
+      console.log(TREE_DATA);
+    });
+    TREE_DATA = this.myTreeData;
+  }
+
+  ngAfterContentInit() {
+    // console.log('After content init', this.myTreeData);
   }
 
   chooseFile(name) {
     this.httpService.postOpenFile(window.sessionStorage.getItem('id'), name).subscribe(data => {
+      console.log('SSSSSSSSSSSSSSSSSSSSSSSSSS');
       console.log(data);
       this.onDatePicked.emit(data);
     });

@@ -118,7 +118,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   setDonePage() {
-    this.socketService.getDoneTasks(window.sessionStorage.getItem('id'), '100').subscribe(tasks => {
+    this.socketService.getDoneTasks(window.sessionStorage.getItem('id')).subscribe(tasks => {
       this.tasks = tasks;
       this.pageService.sendMessage('Done', this.tasks);
     });

@@ -12,9 +12,6 @@
         <p>{{task.description}}</p>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-button color="primary" (click)="onClickEdit(task)">
-          <mat-icon>edit</mat-icon>
-        </button>
         <button mat-button color="primary" (click)="onClickGet(task)">Get</button>
         <button mat-button color="primary" (click)="onClickDelete(task)">
           <mat-icon>delete</mat-icon>
@@ -71,6 +68,11 @@
         <h4>{{task.title}}</h4>
         <p>{{task.description}}</p>
       </mat-card-content>
+      <mat-card-actions>
+        <button mat-button color="primary" (click)="onClickDoneDelete(task)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
     </mat-card>
   </div>
 </div>

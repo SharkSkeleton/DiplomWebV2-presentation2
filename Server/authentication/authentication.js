@@ -332,6 +332,7 @@ function getDataFromFile(response, pId, fName) {
 			if (err) {
 			  console.log('Error', err);
 			} else {
+			  console.log(res);
 			//   res.forEach()console.log(res);
 				for(let i = 0; i < res.length; i++) {
 					if(res[i].includes(fName)) {
@@ -346,7 +347,7 @@ function getDataFromFile(response, pId, fName) {
 		  });
 		// console.log(my_directory_tree);
 
-		db.close();
+		// db.close();
 	  });
 	});
 }

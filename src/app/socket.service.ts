@@ -48,6 +48,11 @@ export class SocketService {
     // this.getTasks();
   }
 
+  userDeleteDoneTask(task: Task) {
+    this.socket.emit('onDeleteDoneTaskClick', { myTask: task });
+    // this.getTasks();
+  }
+
   userEditTask(task: Task) {
     this.socket.emit('onEditTaskClick', { selectedTask: task });
   }
@@ -99,8 +104,8 @@ export class SocketService {
     return this.tasksSubj.asObservable();
   }
 
-  getDoneTasks(id: string, mark: string) {
-    this.socket.emit('DonePage', {userId: id, userMark: mark});
+  getDoneTasks(id: string) {
+    this.socket.emit('DonePage', {userId: id});
     this.socket.on('DonePage', data => {
       console.log('Received data from Backend', data);
       this.tasksSubj.next(data);

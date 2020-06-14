@@ -8,8 +8,11 @@
 <!--    <button (click)="showFiller = !showFiller" mat-raised-button>-->
 <!--      Toggle extra text-->
 <!--    </button>-->
-    <app-class-tree (onDatePicked)="doSomething($event)"></app-class-tree>
+    <app-class-tree [myTreeData]="myGOODData" (onDatePicked)="doSomething($event)"></app-class-tree>
+  </mat-drawer>
 
+  <mat-drawer #consoleDrawer class="sidenav" mode="side" position="end">
+    <app-console [consoleData]="consoleData"></app-console>
   </mat-drawer>
 
   <div class="sidenav-content">
@@ -18,10 +21,10 @@
         <button mat-button (click)="openBottomSheet()">
           <mat-icon>play_arrow</mat-icon>
         </button>
-        <button mat-button>
-          <mat-icon>bug_report</mat-icon>
-        </button>
-        <button mat-button>
+<!--        <button mat-button>-->
+<!--          <mat-icon>bug_report</mat-icon>-->
+<!--        </button>-->
+        <button mat-button (click)="consoleDrawer.toggle()">
           <mat-icon>stop</mat-icon>
         </button>
         <button mat-button (click)="saveData('s')">
