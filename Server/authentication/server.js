@@ -322,6 +322,26 @@ function onNewWebsocketConnection(socket) {
       })
     });
   })
+
+  socket.on("GetOnCheckingTasks", data => {
+    console.log(data.id);
+    localObj = {
+      tasks: [],
+      pId: ''
+    }
+    let o_id = new mongo.ObjectID(data.id);
+    dbo.collection("Users").findOne({'_id': o_id}, function(err, result) {
+      if (err) throw err;
+      localObj.pId = result.currentProject;
+      dbo.collection('Tasks').find({status: 'onChecking'}).toArray(function (e, r) {
+        if (e) throw e;
+        localObj.tasks = r;
+        socket.emit("GetOnCheckingTasks", localObj);
+        socket.broadcast.emit("GetOnCheckingTasks", localObj);
+        console.log(localObj);
+      })
+    });
+  })
 }
 
 function startServer() {

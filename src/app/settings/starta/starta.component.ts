@@ -27,8 +27,10 @@ export class StartaComponent implements OnInit {
     executor: '',
   };
 
+  taskNames = [];
   ngOnInit(): void {
     this.httpService.postGetAllDataAboutUser(window.sessionStorage.getItem('id')).subscribe( (data: User) => { this.user = data; } );
+    this.httpService.postGetAllTasksNames().subscribe((data: []) => { this.taskNames = data; });
   }
 
   constructor(
@@ -40,10 +42,14 @@ export class StartaComponent implements OnInit {
   }
 
   onCreateClick(task: Task) {
-    task.status = 'created';
-    task.author = this.user.login;
-    task.authorRole = this.user.role;
-    this.httpService.postAddedTask(task).subscribe();
-    this.dialogRef.close();
+    if (!this.taskNames.includes(task.title)) {
+      task.status = 'created';
+      task.author = this.user.login;
+      task.authorRole = this.user.role;
+      this.httpService.postAddedTask(task).subscribe();
+      this.dialogRef.close();
+    } else {
+      alert('Ups, task with this Title is already exist!');
+    }
   }
 }

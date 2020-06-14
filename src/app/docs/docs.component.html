@@ -2,7 +2,7 @@
 
 <mat-drawer-container class="container" autosize>
   <mat-drawer #drawer class="sidenav" mode="side">
-    <app-contents-tree></app-contents-tree>
+    <app-contents-tree (onDatePicked)="pickedSomeData($event)"></app-contents-tree>
   </mat-drawer>
   <div class="sidenav-content">
     <mat-toolbar color="warm">
@@ -19,7 +19,12 @@
       </mat-toolbar-row>
     </mat-toolbar>
 
-    Here we should put description of our system and docs!
+    <h1 style="text-align: center">{{currentText.title}}</h1>
+    <h3 style="margin: 1em">{{currentText.subTitle}}</h3>
+    <ul>
+      <h4><li *ngFor="let link of currentText.links" (click)="pickedSomeData(link)" style="margin-top: 1em">{{link}}</li></h4>
+    </ul>
+    <p *ngFor="let text of currentText.text" style="margin: 1em">{{text}}</p>
   </div>
 </mat-drawer-container>
 

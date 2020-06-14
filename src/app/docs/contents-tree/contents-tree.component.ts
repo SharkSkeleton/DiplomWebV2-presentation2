@@ -1,29 +1,46 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {ContentNode} from './contentNode';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
 
 const TREE_DATA = [
-  new ContentNode('Chapter 1', [
-    new ContentNode('Sub_Chapter 1'),
-    new ContentNode('Sub_Chapter 2'),
-    new ContentNode('Sub_Chapter 3')
+  new ContentNode('Home page', [
+    new ContentNode('Header description'),
+    new ContentNode('Content description'),
+    new ContentNode('Footer description')
   ]),
-  new ContentNode('Chapter 2', [
-    new ContentNode('Sub_Chapter 1', [
-      new ContentNode('Sub_Sub_Chapter 1'),
-      new ContentNode('Sub_Sub_Chapter 2'),
-      new ContentNode('Sub_Sub_Content 3')
+  new ContentNode('Chats page', [
+    new ContentNode('Chats list description'),
+    new ContentNode('Chats content')
+  ]),
+  new ContentNode('Dashboard page', [
+    new ContentNode('TODO '),
+    new ContentNode('In Progress'),
+    new ContentNode('On Checking'),
+    new ContentNode('Done')
+  ]),
+  new ContentNode('Work space page', [
+    new ContentNode('Class Tree about'),
+    new ContentNode('Editor about'),
+    new ContentNode('Editor menu about')
+  ]),
+  new ContentNode('Burger menu', [
+    new ContentNode('Docs', [
+      new ContentNode('Tree about'),
+      new ContentNode('Content about')
     ]),
-    new ContentNode('Sub_Chapter 2', [
-      new ContentNode('Sub_Sub_Chapter 1'),
-      new ContentNode('Sub_Sub_Chapter 2'),
-      new ContentNode('Sub_Sub_Content 3')
+    new ContentNode('Checks', [
+      new ContentNode('Check list about'),
+      new ContentNode('Element content about')
     ]),
-    new ContentNode('Sub_Chapter 3', [
-      new ContentNode('Sub_Sub_Chapter 1'),
-      new ContentNode('Sub_Sub_Chapter 2'),
-      new ContentNode('Sub_Sub_Content 3')
+    new ContentNode('Account', [
+      new ContentNode('Fields about'),
+      new ContentNode('Changing & Saving data')
+    ]),
+    new ContentNode('Settings', [
+      new ContentNode('Choose project about'),
+      new ContentNode('Create project about'),
+      new ContentNode('Create tasks about')
     ]),
   ])
 ];
@@ -35,6 +52,7 @@ const TREE_DATA = [
 })
 export class ContentsTreeComponent implements OnInit {
 
+  @Output() onDatePicked: EventEmitter<any> = new EventEmitter<any>();
   openAll = false;
   levels = new Map<ContentNode, number>();
   treeControl: FlatTreeControl<ContentNode>;
@@ -77,6 +95,11 @@ export class ContentsTreeComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  chosenNode(nodeName: string) {
+    // alert(nodeName);
+    this.onDatePicked.emit(nodeName);
   }
 
 }

@@ -155,6 +155,17 @@ export class SocketService {
     return this.subTasksSubj.asObservable();
   }
 
+  userGetAllOnCheckingTasks(uId: string) {
+    this.socket.emit('GetOnCheckingTasks', { id: uId });
+    this.socket.on('GetOnCheckingTasks', data => {
+      if (data !== null) {
+        console.log('Received data from Backend', data);
+        this.tasksSubj.next(data);
+      }
+    });
+    return this.tasksSubj.asObservable();
+  }
+
   sendOnClick() {
     this.socket.emit('onGetClick', {data: 'dummy data'});
   }

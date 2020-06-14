@@ -3,7 +3,7 @@
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
 
   <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding
-                 [class.example-tree-node-odd]="isOdd(node)">
+                 [class.example-tree-node-odd]="isOdd(node)" (click)="chosenNode(node.item)">
     <button mat-icon-button matTreeNodeToggle
     [matTreeNodeToggleRecursive]="openAll"
     [attr.aria-label]="'toggle ' + node.filename">

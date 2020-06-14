@@ -93,4 +93,18 @@ export class HttpService {
     const body = { id: uId };
     return this.http.post('http://localhost:3000/work-space/user-get', body);
   }
+
+  postGetOnCheckingTask(pId: string, task) {
+    const body = {id: pId, myTask: task};
+    return this.http.post('http://localhost:3000/on-checking/get', body);
+  }
+
+  postSetTaskMark(mark: string, task) {
+    const body = {myMark: mark, myTask: task};
+    return this.http.post('http://localhost:3000/on-checking/set-mark', body);
+  }
+
+  postGetAllTasksNames() {
+    return this.http.post('http://localhost:3000/settings/get-all-task-names', 'msg');
+  }
 }

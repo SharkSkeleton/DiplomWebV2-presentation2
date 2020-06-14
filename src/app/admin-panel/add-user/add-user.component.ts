@@ -73,6 +73,9 @@ export class AddUserComponent implements OnInit {
           },
           error => console.log(error)
         );
+      this.user.login = '';
+      this.user.password = '';
+      this.user.role = '';
     } else {
       alert('You must enter all values!');
     }

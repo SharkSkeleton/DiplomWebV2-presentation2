@@ -7,7 +7,8 @@ const mongo = require('mongodb');
 const url = "mongodb://localhost:27017/";
 const fs = require('fs'),
   glob = require("glob"),
-  path = 'C:\\Users\\myagk\\Desktop\\DIPLOMA\\Prog\\Project\\';
+  path = 'C:\\Users\\myagk\\Desktop\\DIPLOMA\\Prog\\Project\\',
+  changesPath = 'C:\\Users\\myagk\\Desktop\\DIPLOMA\\Prog\\Diploma_Data\\Users\\';
 const dirTree = require('directory-tree');
 const { dir } = require('console');
 // const server = require('http').Server(app);
@@ -388,6 +389,187 @@ app.post("/work-space/user-get", jsonParser, function (request, response) {
   });
 });
 
+// user get Changes for OnChecking
+let obj = {
+  oldData: [],
+  newData: [],
+  files: []
+};
+
+function getOnlyFileNamesFromChanges(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].includes('[+ ') || arr[i].includes('[- ')) {
+      mySubStr = arr[i].substr(3, arr[i].length-5);
+      //(str.substr(0, str.length - 8)
+      if(!obj.files.includes(mySubStr)) {
+        obj.files.push(mySubStr);
+      }
+    }
+  }
+}
+
+function getOnlyDataFromChanges(arr, marker) {
+  let start;
+  let end;
+  if (marker === 'old') {
+    start = '[- ';
+    end = '[+ ';
+  } else {
+    start = '[+ ';
+    end = '[- ';
+  }
+  let oldObj = {}
+  let str = '';
+  let subArr = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].includes(start)) {
+      str = arr[i].substr(3, arr[i].length-5);
+      for (let j = i + 1; j < arr.length; j++) {
+        if (arr[j].includes(end) || j === arr.length - 1) {
+          break;
+        } else {
+          subArr.push(arr[j].substr(0, arr[j].length-2));
+        }
+      }
+
+    }
+  }
+  oldObj = {
+    [str]: subArr.join('\n')
+  }
+  if (marker === 'old') {
+    obj.oldData.push(oldObj);
+  } else {
+    obj.newData.push(oldObj);
+  }
+
+}
+
+function filterContent(response, content) {
+
+  let arr = [];
+  arr = content.split('\n');
+  getOnlyFileNamesFromChanges(arr);
+  getOnlyDataFromChanges(arr, 'old');
+  getOnlyDataFromChanges(arr, 'new');
+  console.log('SSSSSSSS');
+  console.log(obj);
+  response.json(obj);
+}
+
+app.post("/on-checking/get", jsonParser, function (request, response) {
+
+  obj = {
+    oldData: [],
+    newData: [],
+    files: []
+  }
+  console.log(request.body);
+  if(!request.body) return response.sendStatus(400);
+  let o_id = new mongo.ObjectID(request.body.id);
+  let myObjToSend = {
+    oldData: [],
+    newData: [],
+    files: []
+  }
+
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    let dbo = db.db("DiplomaDB");
+    dbo.collection("Projects").findOne({'_id': o_id}, function(err, result) {
+      if (err) throw err;
+      if (result !== null) {
+        // response.json({id: result.currentProject, login: result.login});
+
+        let getDirectories = function (src, callback) {
+          glob(src + '/**/*', callback);
+        };
+        getDirectories(`${changesPath}${request.body.myTask.executor}\\`, function (err, res) {
+          if (err) {
+            console.log('Error', err);
+          } else {
+            //   res.forEach()console.log(res);
+            for(let i = 0; i < res.length; i++) {
+              if(res[i].includes('Changes.txt')) {
+                // console.log(res[i])
+                fs.readFile(res[i], 'utf8', function(err, contents) {
+                  // console.log(contents);
+                  // response.json(contents);
+                  filterContent(response, contents);
+                  db.close();
+                });
+              }
+            }
+          }
+        });
+
+      }
+    });
+  });
+});
+
+// user get his current project
+app.post("/on-checking/set-mark", jsonParser, function (request, response) {
+
+  console.log(request.body);
+  if(!request.body) return response.sendStatus(400);
+  let myTitle = request.body.myTask.title;
+  console.log(myTitle);
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    let dbo = db.db("DiplomaDB");
+    let userCount;
+    let currentMark;
+    dbo.collection("Users").find({}).toArray(function(err, result) {
+      if (err) throw err;
+      userCount = result.length;
+      dbo.collection("Tasks").findOne({title: myTitle}, function(err, res) {
+        if (err) throw err;
+        if (res !== null) {
+          if (res.mark !== '') {
+            currentMark = parseInt(res.mark);
+          } else {
+            currentMark = 0;
+          }
+        }
+        if(Math.round(currentMark / Math.round(userCount / 2)) >= Math.round(userCount / 2) * 10) {
+          dbo.collection("Tasks").updateOne({title: myTitle}, {$set:{mark: currentMark + parseInt(request.body.myMark), status: 'Done'}}, function (e, r) {
+            if(e) throw (e);
+          })
+        } else if (Math.round(currentMark + parseInt(request.body.myMark) / Math.round(userCount / 2)) >= Math.round(userCount / 2) * 10) {
+          dbo.collection("Tasks").updateOne({title: myTitle}, {$set:{mark: currentMark + parseInt(request.body.myMark), status: 'Done'}}, function (e, r) {
+            if(e) throw (e);
+          })
+        } else {
+          dbo.collection("Tasks").updateOne({title: myTitle}, {$set:{mark: currentMark + parseInt(request.body.myMark)}}, function (e, r) {
+            if(e) throw (e);
+          })
+        }
+
+      });
+    });
+  });
+});
+
+// user get his current project
+app.post("/settings/get-all-task-names", jsonParser, function (request, response) {
+
+  console.log(request.body);
+  if(!request.body) return response.sendStatus(400);
+  let sendData = [];
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    let dbo = db.db("DiplomaDB");
+    dbo.collection("Tasks").find({}).toArray(function(err, result) {
+      if (err) throw err;
+      for (let i = 0; i < result.length; i++) {
+        sendData.push(result[i].title);
+      }
+      response.json(sendData);
+      db.close();
+    });
+  });
+});
 // app.post("/settings/", jsonParser, function (request, response) {
 //
 //   if(!request.body) return response.sendStatus(400);

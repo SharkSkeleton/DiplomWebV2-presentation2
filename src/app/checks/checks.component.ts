@@ -1,14 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ChangeSomeDataComponent} from '../admin-panel/change-user/change-some-data/change-some-data.component';
 import {CheckPopComponent} from './check-pop/check-pop.component';
+import {SocketService} from '../socket.service';
 
 export interface Section {
-  project: string;
+  taskName: string;
+  taskDescription: string;
+  taskExecutor: string;
 }
 
 export interface DialogData {
-  project: string;
+  pId: string;
+  task: [ {
+    title: string,
+    description: string,
+    executor: string
+  }];
 }
 
 @Component({
@@ -16,30 +24,53 @@ export interface DialogData {
   templateUrl: './checks.component.html',
   styleUrls: ['./checks.component.css']
 })
-export class ChecksComponent implements OnInit {
+export class ChecksComponent implements OnInit, OnDestroy {
 
   project: string;
 
-  tasks: Section[] = [
-    {project: 'Task#777'},
-    {project: 'Tasks'}
-  ];
+  subArr = {
+    pId: '',
+    tasks: [
+      {
+        title: '',
+        description: '',
+        executor: '',
+      }
+    ]
+  };
+
+  sendData = {
+    pId: '',
+    task: {
+      title: '',
+      description: '',
+      executor: ''
+    }
+  };
   // projects: Section[] = [
   //   {
   //     project: 'ProjectToWriteUpdateSed'
   //   },
   // ];
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private socketService: SocketService) { }
 
   ngOnInit(): void {
+    this.socketService.connect();
+    this.socketService.userGetAllOnCheckingTasks(window.sessionStorage.getItem('id')).subscribe((data) => {
+      this.subArr = data;
+    });
   }
 
-  openDialog(): void {
+  openDialog(task): void {
+    this.sendData.pId = this.subArr.pId;
+    this.sendData.task.title = task.title;
+    this.sendData.task.description = task.description;
+    this.sendData.task.executor = task.executor;
     const dialogRef = this.dialog.open(CheckPopComponent, {
       height: '100%',
       width: '100%',
-      data: {name: this.project}
+      data: this.sendData
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -48,4 +79,7 @@ export class ChecksComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    this.socketService.disconnect();
+  }
 }

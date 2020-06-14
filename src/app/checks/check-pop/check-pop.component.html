@@ -1,21 +1,21 @@
 <div class="sidenav-content">
   <mat-toolbar color="warm">
     <mat-toolbar-row>
-      <h1 mat-dialog-title>Task#777</h1>
+      <h1 mat-dialog-title>{{currentTitle[0]}}</h1>
       <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
         <mat-icon>file_copy</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>
-          <span>Main.java</span>
+        <button mat-menu-item *ngFor="let file of myData.files">
+          <span (click)="chooseFile(file)">{{file}}</span>
         </button>
       </mat-menu>
       <span class="example-spacer"></span>
       <mat-form-field class="pad">
         <mat-label>Rate</mat-label>
-        <input matInput [(ngModel)]="data.project">
+        <input type="number" matInput [(ngModel)]="taskMark">
       </mat-form-field>
-      <button mat-raised-button color="primary">
+      <button mat-raised-button color="primary" (click)="approve(taskMark)">
         Approve
       </button>
     </mat-toolbar-row>
@@ -28,7 +28,7 @@
       <mat-card-title>Old File</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      {{text1}}
+      {{oldData}}
     </mat-card-content>
   </mat-card>
 
@@ -37,7 +37,7 @@
       <mat-card-title>New File</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      {{text2}}
+      {{newData}}
     </mat-card-content>
   </mat-card>
 </div>
