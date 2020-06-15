@@ -21,10 +21,10 @@
         <button mat-button [disabled]="btn" (click)="consoleDrawer.toggle(); openBottomSheet()">
           <mat-icon>play_arrow</mat-icon>
         </button>
-        <button mat-button [disabled]="btn">
-          <mat-icon>backup icon</mat-icon>
-        </button>
-        <button mat-button [disabled]="btn" (click)="consoleDrawer.toggle()">
+<!--        <button mat-button [disabled]="btn">-->
+<!--          <mat-icon>backup icon</mat-icon>-->
+<!--        </button>-->
+        <button mat-button [disabled]="btn" (click)="consoleDrawer.toggle(); openBottomSheet()">
           <mat-icon>stop</mat-icon>
         </button>
         <button mat-button [disabled]="btn" (click)="saveData('s')">

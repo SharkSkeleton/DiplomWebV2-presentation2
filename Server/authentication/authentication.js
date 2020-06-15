@@ -7,7 +7,8 @@ const mongo = require('mongodb');
 const url = "mongodb://localhost:27017/";
 const fs = require('fs'),
   glob = require("glob"),
-  path = 'C:\\Users\\myagk\\Desktop\\DIPLOMA\\Prog\\Project\\',
+  path = 'C:\\Users\\myagk\\Desktop\\DIPLOMA\\Prog\\Diploma_Data\\Project\\',
+  path2 = 'C:\\Users\\myagk\\Desktop\\DIPLOMA\\Prog\\Diploma_Data\\Project\\',
   changesPath = 'C:\\Users\\myagk\\Desktop\\DIPLOMA\\Prog\\Diploma_Data\\Users\\';
 const dirTree = require('directory-tree');
 const { dir } = require('console');
@@ -314,21 +315,21 @@ app.post("/work-space/", jsonParser, function (request, response) {
   });
 });
 
-function getDataFromFile(response, pId, fName) {
+function getDataFromFile(response, myPath, fName) {
 
-	let o_id = new mongo.ObjectID(pId);
-	MongoClient.connect(url, function(err, db) {
-	  if (err) throw err;
-	  const dbo = db.db("DiplomaDB");
-	  let oldData = { '_id': o_id };
-
-	  dbo.collection("Projects").findOne(oldData, function(err, result) {
-		if (err) throw err;
-		// dir = result.path;
+	// let o_id = new mongo.ObjectID(pId);
+	// MongoClient.connect(url, function(err, db) {
+	//   if (err) throw err;
+	//   const dbo = db.db("DiplomaDB");
+	//   let oldData = { '_id': o_id };
+  //
+	//   dbo.collection("Projects").findOne(oldData, function(err, result) {
+	// 	if (err) throw err;
+	// 	// dir = result.path;
 		let getDirectories = function (src, callback) {
 			glob(src + '/**/*', callback);
 		  };
-		  getDirectories(result.path, function (err, res) {
+		  getDirectories(`${path2}\\${myPath}`, function (err, res) {
 			if (err) {
 			  console.log('Error', err);
 			} else {
@@ -348,8 +349,8 @@ function getDataFromFile(response, pId, fName) {
 		// console.log(my_directory_tree);
 
 		// db.close();
-	  });
-	});
+	//   });
+	// });
 }
 
 // user get his current project
@@ -364,8 +365,122 @@ app.post("/work-space/data", jsonParser, function (request, response) {
     let dbo = db.db("DiplomaDB");
     dbo.collection("Users").findOne({'_id': o_id}, function(err, result) {
       if (err) throw err;
-      if (result !== null) {
-        getDataFromFile(response, result.currentProject, request.body.fName);
+      if (result !== null && result.currentProject !== null) {
+        console.log(result.currentProject);
+        let o_id2 = new mongo.ObjectID(result.currentProject);
+        dbo.collection("Projects").findOne({'_id': o_id2}, function (e, r) {
+          if (e) throw (e);
+          console.log('SSSSSSSSSSSSSS')
+          // if (fs.existsSync(`${changesPath + result.login}\\${r.name}\\Changes.txt`)) {
+          //   let getDirectories = function (src, callback) {
+          //     glob(src + '/**/*', callback);
+          //   };
+          //   getDirectories(`${changesPath + result.login}\\${r.name}\\Changes.txt`, function (err, res) {
+          //     if (err) {
+          //       console.log('Error', err);
+          //     } else {
+          //       console.log(res);
+          //       //   res.forEach()console.log(res);
+          //       for(let i = 0; i < res.length; i++) {
+          //         if(res[i].includes(fName)) {
+          //           // console.log(res[i])
+          //           fs.readFile(res[i], 'utf8', function(err, contents) {
+          //             console.log(contents);
+          //             response.json(contents);
+          //           });
+          //         }
+          //       }
+          //     }
+          //   });
+          // } else {
+          //   getDataFromFile(response, result.currentProject, request.body.fName);
+          // }
+          console.log('AAAAAAAAAAAAAAAA')
+          console.log(result.login)
+          let path = `${changesPath + result.login}\\${r.name}\\`;
+          if (fs.existsSync(path + 'Changes.txt')) {
+            let getDirectories = function (src, callback) {
+              glob(src + '/**/*', callback);
+            };
+            getDirectories(path, function (err, res) {
+              if (err) {
+                console.log('Error', err);
+              } else {
+                console.log(res);
+                //   res.forEach()console.log(res);
+                for(let i = 0; i < res.length; i++) {
+                  if(res[i].includes('Changes.txt')) {
+                    // console.log(res[i])
+                    fs.readFile(res[i], 'utf8', function(err, contents) {
+                      if (contents !== '') {
+                        if (contents.includes('[+ ')) {
+                          let sA = contents.split('\n')
+                          for (let j = 0; j < sA.length; j++) {
+                            if (sA[j].includes('[+ ')) {
+                              let myAr = [];
+                              for (let k = j + 1; k < sA.length; k++) {
+                                myAr.push(sA[k]);
+                              }
+                              response.json(myAr.join('\n'));
+                            }
+                          }
+
+                        } else if (!contents.includes('[+ ')) {
+                          response.json('');
+                        }
+                        // } else { getDataFromFile(response, r.name, request.body.fName); }
+                      }
+                    });
+                  }
+                }
+              }
+            });
+          } else { getDataFromFile(response, r.name, request.body.fName); }
+          // fs.stat(path + 'Changes.txt', function (err, stat) {
+          //   if (err === null) {
+          //     let getDirectories = function (src, callback) {
+          //       glob(src + '/**/*', callback);
+          //     };
+          //     getDirectories(path, function (err, res) {
+          //       if (err) {
+          //         console.log('Error', err);
+          //       } else {
+          //         console.log(res);
+          //         //   res.forEach()console.log(res);
+          //         for(let i = 0; i < res.length; i++) {
+          //           if(res[i].includes('Changes.txt')) {
+          //             // console.log(res[i])
+          //             fs.readFile(res[i], 'utf8', function(err, contents) {
+          //               if (contents !== '') {
+          //                 if (contents.includes('[+ ')) {
+          //                   let sA = contents.split('\n')
+          //                   for (let j = 0; j < sA.length; j++) {
+          //                     if (sA[j].includes('[+ ')) {
+          //                       let myAr = [];
+          //                       for (let k = j + 1; k < sA.length; k++) {
+          //                         myAr.push(sA[k]);
+          //                       }
+          //                       response.json(myAr.join('\n'));
+          //                     }
+          //                   }
+          //
+          //                 } else if (!contents.includes('[+ ')) {
+          //                   response.json('');
+          //                 }
+          //               } else { getDataFromFile(response, request.body.fName); }
+          //             });
+          //           }
+          //         }
+          //       }
+          //     });
+          //   } else if(err.code === 'ENOENT') {
+          //     getDataFromFile(response, request.body.fName);
+          //
+          //   } else {
+          //     console.log('Some other error: ', err.code);
+          //   }
+          // })
+        })
       }
     });
   });

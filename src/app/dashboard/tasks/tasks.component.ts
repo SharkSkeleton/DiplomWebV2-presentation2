@@ -39,15 +39,15 @@ export class TasksComponent implements OnInit, OnDestroy {
 
   constructor(private pageService: PageService, private httpService: HttpService,
               private socketService: SocketService) {
-    this.pageService.getMessage().subscribe(message => {
-      if (message) {
-        this.message = message.text;
-        this.tasks = message.allTasks;
-      } else {
-        this.message = '';
-        this.tasks = null;
-      }
-    });
+    // this.pageService.getMessage().subscribe(message => {
+    //   if (message) {
+    //     this.message = message.text;
+    //     this.tasks = message.allTasks;
+    //   } else {
+    //     this.message = '';
+    //     this.tasks = null;
+    //   }
+    // });
   }
 
   tasks: Task[] = [

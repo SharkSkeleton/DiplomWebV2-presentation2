@@ -14,7 +14,7 @@ const TREE_DATA = [
     new ContentNode('Chats content')
   ]),
   new ContentNode('Dashboard page', [
-    new ContentNode('TODO '),
+    new ContentNode('TODO'),
     new ContentNode('In Progress'),
     new ContentNode('On Checking'),
     new ContentNode('Done')
