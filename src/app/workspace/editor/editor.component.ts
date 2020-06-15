@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CodeModel} from '@ngstack/code-editor';
 import {Content} from './content';
 import {PageService} from '../../page.service';
@@ -11,6 +11,8 @@ import {PageService} from '../../page.service';
 export class EditorComponent implements OnInit {
 
   @Input() data;
+  // tslint:disable-next-line:no-output-on-prefix
+  @Output() onDatePicked: EventEmitter<any> = new EventEmitter<any>();
   theme = 'vs-light';
   // content = 'Hello';
   codeModel: CodeModel = {
@@ -37,6 +39,10 @@ export class EditorComponent implements OnInit {
 
   ngOnInit(): void {
     this.codeModel.value = this.data;
+  }
+
+  sendNewCodeData() {
+    this.onDatePicked.emit(`${this.codeModel.value}`);
   }
 
 }

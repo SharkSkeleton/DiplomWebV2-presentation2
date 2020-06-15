@@ -306,6 +306,7 @@ function onNewWebsocketConnection(socket) {
       dbo.collection("Users").updateOne(myquery, newvalues, function (e, r) {
         if (e) throw(e);
         console.log("1 doc inserted!");
+        // socket.emit("http://localhost:3000/work-space/", {id: data.userId});
       })
     });
   })

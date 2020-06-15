@@ -571,6 +571,63 @@ app.post("/settings/get-all-task-names", jsonParser, function (request, response
     });
   });
 });
+
+function WriteUserChangesFile(fileName, data) {
+  var mkdirp = require('mkdirp');
+  var getDirName = require('path').dirname;
+  mkdirp(getDirName(fileName), function (err) {
+    if (err) return err;
+    fs.writeFile(fileName, data, function (err) {
+      if (err) throw err;
+    });
+  });
+}
+
+// admin get all users by login
+app.post("/work-space/changes", jsonParser, function (request, response) {
+
+  if (!request.body) return response.sendStatus(400);
+  let user_id = new mongo.ObjectID(request.body.userId);
+  let findQuery = {'_id': user_id};
+  MongoClient.connect(url, function (err, db) {
+    if (err) throw err;
+    let dbo = db.db("DiplomaDB");
+    dbo.collection("Users").findOne(findQuery, function (err, user_result) {
+
+      if (err) throw err;
+      if (user_result !== null) {
+        let project_id = new mongo.ObjectID(user_result.currentProject);
+        dbo.collection("Projects").findOne({'_id': project_id}, function (err, project_result) {
+          if (err) throw err
+          if (project_result !== null) {
+            console.log(project_result);
+            WriteUserChangesFile(changesPath.concat("/").concat(user_result.login).concat("/").concat(project_result.name).concat("/Changes.txt"), request.body.content);
+            response.json(project_result);
+            db.close();
+          }
+        });
+      }
+    });
+  });
+});
+
+// admin get all users by login
+app.post("/work-space/console/get-project-name", jsonParser, function (request, response) {
+
+  if (!request.body) return response.sendStatus(400);
+  let project_id = new mongo.ObjectID(request.body.pId);
+  let findQuery = {'_id': project_id};
+  MongoClient.connect(url, function (err, db) {
+    if (err) throw err;
+    let dbo = db.db("DiplomaDB");
+    dbo.collection("Projects").findOne(findQuery, function (err, result) {
+      if (err) throw err;
+      if (result !== null) {
+        response.json(result.name);
+      }
+    });
+  });
+});
 // app.post("/settings/", jsonParser, function (request, response) {
 //
 //   if(!request.body) return response.sendStatus(400);

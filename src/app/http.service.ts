@@ -107,4 +107,14 @@ export class HttpService {
   postGetAllTasksNames() {
     return this.http.post('http://localhost:3000/settings/get-all-task-names', 'msg');
   }
+
+  postUserChanges(myId: string, data: string) {
+    const body = { userId: myId, content: data };
+    return this.http.post('http://localhost:3000/work-space/changes', body);
+  }
+
+  postGetProjectName(myId: string) {
+    const body = { pId: myId};
+    return this.http.post('http://localhost:3000/work-space/console/get-project-name', body);
+  }
 }

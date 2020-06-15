@@ -1,4 +1,15 @@
-import {AfterContentInit, Component, EventEmitter, Injectable, Input, OnInit, Output} from '@angular/core';
+import {
+  AfterContentInit,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Injectable,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {FlatTreeControl} from '@angular/cdk/tree';
 import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
@@ -116,7 +127,7 @@ export class ChecklistDatabase {
   styleUrls: ['./class-tree.component.css'],
   providers: [ChecklistDatabase]
 })
-export class ClassTreeComponent implements OnInit, AfterContentInit {
+export class ClassTreeComponent implements OnInit, AfterContentInit, OnChanges {
 
   @Input() myTreeData;
   // tslint:disable-next-line:no-output-on-prefix
@@ -144,7 +155,9 @@ export class ClassTreeComponent implements OnInit, AfterContentInit {
   checklistSelection = new SelectionModel<TodoItemFlatNode>(true /* multiple */);
   myObj;
   // tslint:disable-next-line:variable-name
-  constructor(private _database: ChecklistDatabase, private pageService: PageService, private httpService: HttpService) {
+  constructor(private _database: ChecklistDatabase, private pageService: PageService, private httpService: HttpService,
+              private cd: ChangeDetectorRef) {
+    // cd.detach();
     this.treeFlattener = new MatTreeFlattener(this.transformer, this.getLevel,
       this.isExpandable, this.getChildren);
     this.treeControl = new FlatTreeControl<TodoItemFlatNode>(this.getLevel, this.isExpandable);
@@ -292,6 +305,9 @@ export class ClassTreeComponent implements OnInit, AfterContentInit {
     });
     TREE_DATA = this.myTreeData;
   }
+  ngOnChanges(changes: SimpleChanges) {
+    this.cd.reattach();
+  }
 
   ngAfterContentInit() {
     // console.log('After content init', this.myTreeData);
@@ -301,7 +317,7 @@ export class ClassTreeComponent implements OnInit, AfterContentInit {
     this.httpService.postOpenFile(window.sessionStorage.getItem('id'), name).subscribe(data => {
       console.log('SSSSSSSSSSSSSSSSSSSSSSSSSS');
       console.log(data);
-      this.onDatePicked.emit(data);
+      this.onDatePicked.emit(`[- ${name}]\n${data}`);
     });
     console.log(name);
   }
